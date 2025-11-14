@@ -11,7 +11,7 @@
         :root {
             --primary-green: #00A950; /* Зеленый цвет флага Башкортостана */
             --tg-color-scheme: light; /* Default theme */
-           
+          
             /* Telegram System Colors */
             --tg-theme-bg-color: #ffffff;
             --tg-theme-text-color: #000000;
@@ -21,7 +21,7 @@
             --tg-theme-button-text-color: #ffffff;
             --tg-theme-secondary-bg-color: #f3f3f3;
         }
-       
+      
         /* Dark theme adjustments */
         [data-theme="dark"] {
              --tg-theme-bg-color: #18222d;
@@ -58,7 +58,7 @@
             font-weight: 700;
             margin: 0;
         }
-       
+      
         .header p {
             font-size: 15px;
             color: var(--tg-theme-hint-color);
@@ -99,7 +99,7 @@
             resize: vertical;
             min-height: 90px;
         }
-       
+      
         .form-group small {
             display: block;
             margin-top: 6px;
@@ -109,6 +109,7 @@
         }
         /* Стили для кнопки отправки */
         #submit-btn {
+            display: none; /* Скрываем HTML-кнопку, используем только MainButton */
             width: 100%;
             padding: 12px;
             background-color: var(--tg-theme-button-color);
@@ -181,7 +182,7 @@
                     <small>Укажите город или район в РБ.</small>
                 </div>
             </div>
-            <!-- Добавленная кнопка отправки -->
+            <!-- Добавленная кнопка отправки, но скрыта через CSS -->
             <button type="button" id="submit-btn" disabled>Отправить заявку</button>
         </form>
     </div>
@@ -189,9 +190,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const tg = window.Telegram.WebApp;
-           
+          
             // --- THEME ADAPTATION ---
-            // Set theme based on Telegram's color scheme
             if (tg.colorScheme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
             }
@@ -201,53 +201,48 @@
             });
             tg.ready();
             tg.expand();
-            // --- MAIN BUTTON LOGIC (опционально, можно закомментировать если не нужен) ---
+            // --- MAIN BUTTON LOGIC ---
             const mainButton = tg.MainButton;
             mainButton.setText("Отправить заявку");
             mainButton.setParams({
-                color: '#00A950', text_color: '#ffffff'
+                color: '#00A950',  // Fixed: hex value for green
+                text_color: '#ffffff'
             });
-            mainButton.show(); // Показываем MainButton
-            
+            mainButton.show(); 
+           
             const form = document.getElementById('invest-form');
-            const submitBtn = document.getElementById('submit-btn');
-            
+           
             function updateButtonState() {
                 const isValid = form.checkValidity();
-                submitBtn.disabled = !isValid;
+                console.log('Form valid:', isValid);  // Debugging log
                 if (isValid) {
                     mainButton.enable();
                 } else {
                     mainButton.disable();
                 }
             }
-            // Начальное состояние
+            // Initial state
             updateButtonState();
-            form.addEventListener('input', updateButtonState); // Обновляем на каждый ввод
-            form.addEventListener('change', updateButtonState); // Для select и других изменений
-            
-            // --- ОБРАБОТКА КЛИКА НА HTML-КНОПКУ ---
-            submitBtn.addEventListener('click', function() {
+            form.addEventListener('input', updateButtonState); 
+            form.addEventListener('change', updateButtonState); 
+           
+            // --- MAINBUTTON CLICK HANDLER ---
+            mainButton.onClick(function() {
+                console.log('MainButton clicked');  // Debugging log
                 if (!form.checkValidity()) {
                     tg.showAlert('Пожалуйста, заполните все обязательные поля, отмеченные звездочкой (*).');
                     return;
                 }
-                mainButton.showProgress(); // Показываем прогресс на MainButton (для consistency)
+                mainButton.showProgress(); 
                 const formData = new FormData(form);
                 const data = {};
                 formData.forEach((value, key) => {
                     data[key] = value;
                 });
                 tg.sendData(JSON.stringify(data));
-                // Опционально: tg.close() после отправки, но бот обработает
-            });
-            
-            // Синхронизация с MainButton (если клик на MainButton, то же самое)
-            mainButton.onClick(function() {
-                submitBtn.click(); // Вызываем клик на HTML-кнопке для единой логики
+                // Optionally: tg.close() after send
             });
         });
     </script>
 </body>
 </html>
-
