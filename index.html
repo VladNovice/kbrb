@@ -211,28 +211,25 @@
             mainButton.show(); // Показываем MainButton
             
             const form = document.getElementById('invest-form');
-            const requiredFields = form.querySelectorAll('[required]');
             const submitBtn = document.getElementById('submit-btn');
             
-            function checkFormValidity() {
-                return Array.from(requiredFields).every(field => field.value && field.value.trim() !== '');
-            }
             function updateButtonState() {
-                if (checkFormValidity()) {
-                    submitBtn.disabled = false;
+                const isValid = form.checkValidity();
+                submitBtn.disabled = !isValid;
+                if (isValid) {
                     mainButton.enable();
                 } else {
-                    submitBtn.disabled = true;
                     mainButton.disable();
                 }
             }
             // Начальное состояние
             updateButtonState();
             form.addEventListener('input', updateButtonState); // Обновляем на каждый ввод
+            form.addEventListener('change', updateButtonState); // Для select и других изменений
             
             // --- ОБРАБОТКА КЛИКА НА HTML-КНОПКУ ---
             submitBtn.addEventListener('click', function() {
-                if (!checkFormValidity()) {
+                if (!form.checkValidity()) {
                     tg.showAlert('Пожалуйста, заполните все обязательные поля, отмеченные звездочкой (*).');
                     return;
                 }
