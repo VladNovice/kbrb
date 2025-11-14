@@ -2,28 +2,33 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Заявка на инвестиционный проект</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-green: #00A950; /* Фирменный зеленый */
-            --primary-green-hover: #009345;
-            --text-primary: #1c1c1e;
-            --text-secondary: #6b7280;
-            --bg-main: #f7f8fa;
-            --bg-secondary: #ffffff;
-            --border-color: #e5e7eb;
+            --primary-green: #00A950; /* Зеленый цвет флага Башкортостана */
+            --tg-color-scheme: light; /* Default theme */
             
-            /* Telegram Theme Variables Fallback */
-            --tg-theme-bg-color: var(--bg-main);
-            --tg-theme-text-color: var(--text-primary);
-            --tg-theme-hint-color: var(--text-secondary);
+            /* Telegram System Colors */
+            --tg-theme-bg-color: #ffffff;
+            --tg-theme-text-color: #000000;
+            --tg-theme-hint-color: #999999;
+            --tg-theme-link-color: #2481cc;
             --tg-theme-button-color: var(--primary-green);
             --tg-theme-button-text-color: #ffffff;
-            --tg-theme-secondary-bg-color: var(--bg-secondary);
+            --tg-theme-secondary-bg-color: #f3f3f3;
+        }
+        
+        /* Dark theme adjustments */
+        [data-theme="dark"] {
+             --tg-theme-bg-color: #18222d;
+             --tg-theme-text-color: #ffffff;
+             --tg-theme-hint-color: #aaaaaa;
+             --tg-theme-link-color: #62bcf9;
+             --tg-theme-secondary-bg-color: #212d3b;
         }
 
         body {
@@ -31,10 +36,10 @@
             background-color: var(--tg-theme-bg-color);
             color: var(--tg-theme-text-color);
             margin: 0;
-            padding: 20px;
+            padding: 15px;
+            box-sizing: border-box;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e5e7eb' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            -moz-osx-smoothing: grayscale;
         }
 
         .container {
@@ -44,51 +49,36 @@
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .header img {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 10px;
+            width: 50px;
+            height: 50px;
+            margin-bottom: 8px;
         }
 
         .header h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
-            color: var(--tg-theme-text-color);
             margin: 0;
         }
         
         .header p {
-            font-size: 16px;
+            font-size: 15px;
             color: var(--tg-theme-hint-color);
-            margin: 5px 0 0;
+            margin: 4px 0 0;
         }
 
-        fieldset {
-            border: 1px solid var(--border-color);
+        .form-section {
             background-color: var(--tg-theme-secondary-bg-color);
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
-        }
-
-        legend {
-            font-size: 18px;
-            font-weight: 600;
-            padding: 0 10px;
-            margin-left: 10px;
-            color: var(--tg-theme-text-color);
+            padding: 1px 15px 15px 15px;
+            margin-bottom: 15px;
         }
 
         .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group:last-child {
-            margin-bottom: 0;
+            margin-top: 15px;
         }
 
         label {
@@ -102,31 +92,31 @@
         input, select, textarea {
             width: 100%;
             padding: 12px;
-            border: 1px solid var(--border-color);
+            border: none;
             background-color: var(--tg-theme-bg-color);
             border-radius: 8px;
             box-sizing: border-box;
             font-size: 16px;
             color: var(--tg-theme-text-color);
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            transition: box-shadow 0.2s ease;
         }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: var(--primary-green);
-            box-shadow: 0 0 0 3px rgba(0, 169, 80, 0.1);
+            box-shadow: 0 0 0 2px var(--tg-theme-link-color);
         }
 
         textarea {
             resize: vertical;
-            min-height: 100px;
+            min-height: 90px;
         }
-
+        
         .form-group small {
             display: block;
             margin-top: 6px;
             color: var(--tg-theme-hint-color);
             font-size: 13px;
+            padding-left: 5px;
         }
     </style>
 </head>
@@ -134,17 +124,16 @@
 
     <div class="container">
         <header class="header">
-            <img src="logo-1.png" alt="Герб Республики Башкортостан">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Coat_of_arms_of_Bashkortostan.svg/200px-Coat_of_arms_of_Bashkortostan.svg.png" alt="Герб Республики Башкортостан">
             <h1>Инвестиционный проект</h1>
-            <p>Корпорация развития Республики Башкортостан</p>
+            <p>Корпорация развития РБ</p>
         </header>
 
         <form id="invest-form">
-            <fieldset>
-                <legend>Общая информация</legend>
+            <div class="form-section">
                 <div class="form-group">
                     <label for="project_name">Название проекта *</label>
-                    <input type="text" id="project_name" name="project_name" required placeholder="Например: Строительство эко-отеля 'Шихан'">
+                    <input type="text" id="project_name" name="project_name" required placeholder="Например: Эко-отель 'Шихан'">
                 </div>
                 <div class="form-group">
                     <label for="initiator">Инициатор (компания, руководитель) *</label>
@@ -154,39 +143,21 @@
                     <label for="contacts">Контактная информация *</label>
                     <textarea id="contacts" name="contacts" required placeholder="ФИО, должность, телефон, email"></textarea>
                 </div>
-            </fieldset>
+            </div>
 
-            <fieldset>
-                <legend>Финансовые показатели</legend>
+            <div class="form-section">
                 <div class="form-group">
                     <label for="investment_sum">Сумма вложений, млн. руб. *</label>
                     <input type="number" id="investment_sum" name="investment_sum" required min="0" step="0.1" placeholder="Например: 150.5">
                 </div>
                 <div class="form-group">
-                    <label for="financing_source">Источники финансирования</label>
-                    <select id="financing_source" name="financing_source">
-                        <option value="собственные">Собственные</option>
-                        <option value="заемные">Заемные</option>
-                        <option value="смешанные">Собственные/Заемные</option>
-                    </select>
-                </div>
-                <div class="form-group">
                     <label for="jobs_created">Создаваемые рабочие места, чел. *</label>
                     <input type="number" id="jobs_created" name="jobs_created" required min="1" placeholder="Например: 25">
                 </div>
-            </fieldset>
+            </div>
 
-            <fieldset>
-                <legend>Детали проекта</legend>
-                <div class="form-group">
-                    <label for="development_stage">Стадия разработки</label>
-                    <select id="development_stage" name="development_stage">
-                        <option value="прединвестиционное">Прединвестиционное</option>
-                        <option value="инвестиционное">Инвестиционное</option>
-                        <option value="эксплуатационный">Эксплуатационный</option>
-                    </select>
-                </div>
-                <div class="form-group">
+            <div class="form-section">
+                 <div class="form-group">
                     <label for="activity_type">Вид деятельности</label>
                     <select id="activity_type" name="activity_type">
                         <option value="пром. производство">Пром. производство</option>
@@ -201,9 +172,9 @@
                 <div class="form-group">
                     <label for="location">Желаемое местоположение</label>
                     <input type="text" id="location" name="location" placeholder="Например: г. Уфа, Белебей, Кумертау">
-                    <small>Укажите город или муниципальный район в РБ.</small>
+                    <small>Укажите город или район в РБ.</small>
                 </div>
-            </fieldset>
+            </div>
         </form>
     </div>
 
@@ -211,16 +182,28 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const tg = window.Telegram.WebApp;
+            
+            // --- THEME ADAPTATION ---
+            // Set theme based on Telegram's color scheme
+            if (tg.colorScheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+            // Listen for theme changes
+            tg.onEvent('themeChanged', function() {
+                document.documentElement.setAttribute('data-theme', tg.colorScheme);
+            });
+
             tg.ready();
             tg.expand();
 
-            // Настраиваем главную кнопку
-            tg.MainButton.setText("Отправить заявку");
-            tg.MainButton.setParams({
+            // --- MAIN BUTTON LOGIC ---
+            const mainButton = tg.MainButton;
+            mainButton.setText("Отправить заявку");
+            mainButton.setParams({
                 color: 'var(--primary-green)',
                 text_color: '#ffffff'
             });
-
+            
             const form = document.getElementById('invest-form');
             const requiredFields = form.querySelectorAll('[required]');
 
@@ -228,27 +211,28 @@
                 return Array.from(requiredFields).every(field => field.value && field.value.trim() !== '');
             }
 
-            function toggleMainButton() {
+            function updateMainButtonState() {
                 if (checkFormValidity()) {
-                    tg.MainButton.show();
+                    mainButton.enable();
                 } else {
-                    tg.MainButton.hide();
+                    mainButton.disable();
                 }
             }
 
-            // Проверяем форму при загрузке и при каждом изменении
-            toggleMainButton();
-            form.addEventListener('input', toggleMainButton);
+            // Show the button immediately, but it will be disabled or enabled based on the form's state
+            mainButton.show();
+            updateMainButtonState(); // Set initial state on load
 
-            // Обработчик нажатия на главную кнопку
-            tg.onEvent('mainButtonClicked', function() {
+            form.addEventListener('input', updateMainButtonState); // Check on every input change
+
+            // --- FORM SUBMISSION ---
+            mainButton.onClick(function() {
                 if (!checkFormValidity()) {
                     tg.showAlert('Пожалуйста, заполните все обязательные поля, отмеченные звездочкой (*).');
                     return;
                 }
 
-                // Показываем индикатор загрузки
-                tg.MainButton.showProgress();
+                mainButton.showProgress(); // Show loading indicator
 
                 const formData = new FormData(form);
                 const data = {};
@@ -256,15 +240,9 @@
                     data[key] = value;
                 });
 
-                // Отправляем данные в JSON-формате боту
                 tg.sendData(JSON.stringify(data));
-                
-                // После отправки можно скрыть индикатор, но sendData обычно закрывает Web App
-                // tg.MainButton.hideProgress();
             });
         });
     </script>
 </body>
 </html>
-
-
