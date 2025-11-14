@@ -1,247 +1,382 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Заявка на инвестиционный проект</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"/>
+    <title>Заявка на инвестиционный проект — Корпорация развития РБ</title>
+
+    <!-- Шрифты и простые стили (сохранён стиль Manrope как у вас) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+
     <style>
-        :root {
-            --primary-green: #00A950; /* Зеленый цвет флага Башкортостана */
-            --tg-color-scheme: light; /* Default theme */
-          
-            /* Telegram System Colors */
-            --tg-theme-bg-color: #ffffff;
-            --tg-theme-text-color: #000000;
-            --tg-theme-hint-color: #999999;
-            --tg-theme-link-color: #2481cc;
-            --tg-theme-button-color: var(--primary-green);
-            --tg-theme-button-text-color: #ffffff;
-            --tg-theme-secondary-bg-color: #f3f3f3;
+        :root{
+            --primary-green: #00A950;
+            --bg: #ffffff;
+            --text: #0b1a1f;
+            --muted: #6b7280;
+            --card: #f6f7f9;
+            --accent: #2481cc;
+            --radius: 12px;
+            font-family: 'Manrope', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
         }
-      
-        /* Dark theme adjustments */
-        [data-theme="dark"] {
-             --tg-theme-bg-color: #18222d;
-             --tg-theme-text-color: #ffffff;
-             --tg-theme-hint-color: #aaaaaa;
-             --tg-theme-link-color: #62bcf9;
-             --tg-theme-secondary-bg-color: #212d3b;
+        [data-theme="dark"]{
+            --bg: #0f1720;
+            --text: #e6eef6;
+            --muted: #98a3b2;
+            --card: #0f1726;
         }
-        body {
-            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color);
-            color: var(--tg-theme-text-color);
-            margin: 0;
-            padding: 15px;
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-smoothing: grayscale;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .header img {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 8px;
-        }
-        .header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            margin: 0;
-        }
-      
-        .header p {
-            font-size: 15px;
-            color: var(--tg-theme-hint-color);
-            margin: 4px 0 0;
-        }
-        .form-section {
-            background-color: var(--tg-theme-secondary-bg-color);
-            border-radius: 12px;
-            padding: 1px 15px 15px 15px;
-            margin-bottom: 15px;
-        }
-        .form-group {
-            margin-top: 15px;
-        }
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: var(--tg-theme-hint-color);
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            background-color: var(--tg-theme-bg-color);
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 16px;
-            color: var(--tg-theme-text-color);
-            transition: box-shadow 0.2s ease;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px var(--tg-theme-link-color);
-        }
-        textarea {
-            resize: vertical;
-            min-height: 90px;
-        }
-      
-        .form-group small {
-            display: block;
-            margin-top: 6px;
-            color: var(--tg-theme-hint-color);
-            font-size: 13px;
-            padding-left: 5px;
-        }
-        /* Стили для кнопки отправки */
-        #submit-btn {
-            display: none; /* Скрываем HTML-кнопку, используем только MainButton */
-            width: 100%;
-            padding: 12px;
-            background-color: var(--tg-theme-button-color);
-            color: var(--tg-theme-button-text-color);
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            margin-top: 15px;
-        }
-        #submit-btn:disabled {
-            background-color: var(--tg-theme-hint-color);
-            cursor: not-allowed;
-        }
-        #submit-btn:hover:not(:disabled) {
-            background-color: darken(var(--tg-theme-button-color), 10%);
-        }
+        html,body{background:var(--bg);color:var(--text);margin:0;padding:16px;box-sizing:border-box;}
+        .container{max-width:760px;margin:0 auto;}
+        header{display:flex;gap:12px;align-items:center;margin-bottom:18px}
+        header img{width:56px;height:56px;border-radius:8px;object-fit:contain}
+        header h1{font-size:20px;margin:0}
+        header p{margin:0;color:var(--muted);font-size:14px}
+
+        form{display:block;gap:14px}
+        .card{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,0.03)}
+        .card h2{margin:0 0 8px 0;font-size:15px}
+        .row{display:flex;gap:12px;flex-wrap:wrap}
+        .col{flex:1 1 220px;min-width:200px}
+        label{display:block;font-weight:600;font-size:13px;color:var(--muted);margin-bottom:6px}
+        input,select,textarea{width:100%;padding:10px 12px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:var(--bg);color:var(--text);font-size:15px;box-sizing:border-box}
+        textarea{min-height:100px;resize:vertical}
+        .small{font-size:13px;color:var(--muted);margin-top:6px}
+        details{background:transparent;border-radius:8px}
+        summary{cursor:pointer;padding:8px 10px;border-radius:8px;font-weight:600;list-style:none}
+        .muted-note{color:var(--muted);font-size:13px}
+
+        /* main button not visible, Telegram MainButton used; add fallback button for non-Telegram debug */
+        #submit-fallback{display:none;margin-top:10px;padding:12px;border:none;border-radius:10px;background:var(--primary-green);color:#fff;font-weight:700;cursor:pointer;width:100%}
+        @media (max-width:420px){ .row{flex-direction:column} .col{min-width:unset} }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Coat_of_arms_of_Bashkortostan.svg/200px-Coat_of_arms_of_Bashkortostan.svg.png" alt="Герб Республики Башкортостан">
-            <h1>Инвестиционный проект</h1>
-            <p>Корпорация развития РБ</p>
+        <header>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Coat_of_arms_of_Bashkortostan.svg/200px-Coat_of_arms_of_Bashkortostan.svg.png" alt="Герб Башкортостана"/>
+            <div>
+                <h1>Заявка на инвестиционный проект</h1>
+                <p>Корпорация развития Республики Башкортостан — форма заявки для предварительного анализа</p>
+            </div>
         </header>
-        <form id="invest-form">
-            <div class="form-section">
-                <div class="form-group">
-                    <label for="project_name">Название проекта *</label>
-                    <input type="text" id="project_name" name="project_name" required placeholder="Например: Эко-отель 'Шихан'">
+
+        <form id="invest-form" autocomplete="on" novalidate>
+            <!-- 1. Базовые сведения -->
+            <section class="card" aria-labelledby="basic-title">
+                <h2 id="basic-title">1. Базовые сведения</h2>
+                <div class="row">
+                    <div class="col">
+                        <label for="project_name">Название проекта *</label>
+                        <input id="project_name" name="project_name" type="text" required placeholder="Эко-отель 'Шихан'"/>
+                    </div>
+                    <div class="col">
+                        <label for="initiator">Инициатор (компания / руководитель) *</label>
+                        <input id="initiator" name="initiator" type="text" required placeholder="ООО 'БашТуризм', Иванов И.И."/>
+                    </div>
+                    <div class="col">
+                        <label for="contacts">Контактная информация *</label>
+                        <textarea id="contacts" name="contacts" required placeholder="ФИО, должность, телефон, email"></textarea>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="initiator">Инициатор (компания, руководитель) *</label>
-                    <input type="text" id="initiator" name="initiator" required placeholder="ООО 'БашТуризм', Иванов И.И.">
+
+                <div style="height:8px"></div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="description">Краткое описание проекта</label>
+                        <textarea id="description" name="description" placeholder="Кратко — что будет производиться / предоставляться"></textarea>
+                    </div>
+                    <div class="col">
+                        <label for="stage">Стадия проекта</label>
+                        <select id="stage" name="stage">
+                            <option value="">— Выберите —</option>
+                            <option value="прединвестиционная">Прединвестиционная (идея/ ТЭО)</option>
+                            <option value="инвестиционная">Инвестиционная (строительство)</option>
+                            <option value="эксплуатация">Эксплуатация</option>
+                        </select>
+                        <div class="small">Укажите текущую стадию (если неизвестно — оставьте пустым)</div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="contacts">Контактная информация *</label>
-                    <textarea id="contacts" name="contacts" required placeholder="ФИО, должность, телефон, email"></textarea>
+            </section>
+
+            <!-- 2. Финансы -->
+            <section class="card" aria-labelledby="finance-title">
+                <h2 id="finance-title">2. Финансы</h2>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="investment_sum">Сумма вложений *</label>
+                        <div style="display:flex;gap:8px">
+                            <input id="investment_sum" name="investment_sum" type="number" min="0" step="0.1" required placeholder="Например: 150.5"/>
+                            <select id="investment_unit" name="investment_unit" aria-label="Единицы инвестиций" title="Единицы">
+                                <option value="mln" selected>млн ₽</option>
+                                <option value="rub">₽</option>
+                            </select>
+                        </div>
+                        <div class="small">Введите сумму в миллионах рублей (например 150.5). Если укажете в рублях — выберите ₽ или оставьте, бэкенд попытается определить автоматически.</div>
+                    </div>
+
+                    <div class="col">
+                        <label for="jobs_created">Создаваемые рабочие места *</label>
+                        <input id="jobs_created" name="jobs_created" type="number" min="0" step="1" required placeholder="Например: 25"/>
+                    </div>
                 </div>
-            </div>
-            <div class="form-section">
-                <div class="form-group">
-                    <label for="investment_sum">Сумма вложений, млн. руб. *</label>
-                    <input type="number" id="investment_sum" name="investment_sum" required min="0" step="0.1" placeholder="Например: 150.5">
+
+                <div style="height:8px"></div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="funding_own">Источники финансирования — собственные (сумма)</label>
+                        <input id="funding_own" name="funding_own" type="number" min="0" step="0.1" placeholder="в млн ₽ (по возможности)"/>
+                    </div>
+                    <div class="col">
+                        <label for="funding_borrowed">Источники финансирования — заемные (сумма)</label>
+                        <input id="funding_borrowed" name="funding_borrowed" type="number" min="0" step="0.1" placeholder="в млн ₽"/>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="jobs_created">Создаваемые рабочие места, чел. *</label>
-                    <input type="number" id="jobs_created" name="jobs_created" required min="1" placeholder="Например: 25">
+
+            </section>
+
+            <!-- 3. Локация и площадка -->
+            <section class="card" aria-labelledby="location-title">
+                <h2 id="location-title">3. Локация и площадка</h2>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="location">Желаемое местоположение</label>
+                        <input id="location" name="location" type="text" placeholder="г. Уфа, Белебей, Кумертау или район" />
+                        <div class="small">Укажите город/район. Для ТОР важна локация (Кумертау, Благовещенск, Белорецк, Нефтекамск, Белебей).</div>
+                    </div>
+
+                    <div class="col">
+                        <label for="land_area_m2">Площадь земельного участка (м²)</label>
+                        <input id="land_area_m2" name="land_area_m2" type="number" min="0" step="1" placeholder="в кв. метрах"/>
+                    </div>
+
+                    <div class="col">
+                        <label for="site_form">Форма получения площадки</label>
+                        <select id="site_form" name="site_form">
+                            <option value="">— Выберите —</option>
+                            <option value="покупка">Покупка</option>
+                            <option value="аренда">Аренда</option>
+                            <option value="предпочтительна аренда">Предпочтительна аренда</option>
+                            <option value="предпочтительна покупка">Предпочтительна покупка</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="form-section">
-                 <div class="form-group">
-                    <label for="activity_type">Вид деятельности</label>
-                    <select id="activity_type" name="activity_type">
-                        <option value="пром. производство">Пром. производство</option>
-                        <option value="пищевое производство">Пищевое производство</option>
-                        <option value="с/х производство">Сельскохозяйственное производство</option>
-                        <option value="туризм">Туризм</option>
-                        <option value="придорожный сервис">Придорожный сервис</option>
-                        <option value="торговля">Сфера торговли</option>
-                        <option value="другое">Другое</option>
-                    </select>
+
+                <div style="height:8px"></div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="transport_requirements">Требования к транспортной инфраструктуре</label>
+                        <textarea id="transport_requirements" name="transport_requirements" placeholder="Доступность трасс, подъездные пути, ж/д подъезд и т.п."></textarea>
+                    </div>
+
+                    <div class="col">
+                        <label for="building_requirements">Требования к зданиям и помещениям</label>
+                        <textarea id="building_requirements" name="building_requirements" placeholder="Площадь, высота потолков, классы помещений, складские требования"></textarea>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="location">Желаемое местоположение</label>
-                    <input type="text" id="location" name="location" placeholder="Например: г. Уфа, Белебей, Кумертау">
-                    <small>Укажите город или район в РБ.</small>
+            </section>
+
+            <!-- 4. График проекта -->
+            <section class="card" aria-labelledby="schedule-title">
+                <h2 id="schedule-title">4. График реализации</h2>
+                <div class="row">
+                    <div class="col">
+                        <label for="schedule_start">Планируемая дата старта</label>
+                        <input id="schedule_start" name="schedule_start" type="date" />
+                    </div>
+                    <div class="col">
+                        <label for="schedule_duration_months">Планируемая длительность (месяцев)</label>
+                        <input id="schedule_duration_months" name="schedule_duration_months" type="number" min="0" step="1" placeholder="Например: 24"/>
+                    </div>
                 </div>
-            </div>
-            <!-- Добавленная кнопка отправки, но скрыта через CSS -->
-            <button type="button" id="submit-btn" disabled>Отправить заявку</button>
+            </section>
+
+            <!-- 5. Продвинутые / инженерные параметры (по умолчанию свернуты) -->
+            <details class="card" id="advanced" aria-labelledby="advanced-title">
+                <summary id="advanced-title">5. Продвинутые — инженерные параметры (свернуть / развернуть)</summary>
+
+                <div style="height:8px"></div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="hazard_class">Класс опасности производственного объекта</label>
+                        <select id="hazard_class" name="hazard_class">
+                            <option value="">— Не указывать —</option>
+                            <option value="1">1 (наименьшая опасность)</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5 (наибольшая опасность)</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="gas_m3_per_h">Газ (м³/час)</label>
+                        <input id="gas_m3_per_h" name="gas_m3_per_h" type="number" min="0" step="0.1" placeholder="Например: 50"/>
+                    </div>
+                    <div class="col">
+                        <label for="electricity_kw">Электроснабжение (кВт)</label>
+                        <input id="electricity_kw" name="electricity_kw" type="number" min="0" step="0.1" placeholder="Например: 500"/>
+                    </div>
+                </div>
+
+                <div style="height:8px"></div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="water_drinking_m3_per_day">Водоснабжение питьевое (м³/сутки)</label>
+                        <input id="water_drinking_m3_per_day" name="water_drinking_m3_per_day" type="number" min="0" step="0.1" />
+                    </div>
+                    <div class="col">
+                        <label for="water_technical_m3_per_day">Водоснабжение техническое (м³/сутки)</label>
+                        <input id="water_technical_m3_per_day" name="water_technical_m3_per_day" type="number" min="0" step="0.1" />
+                    </div>
+                    <div class="col">
+                        <label for="sewage_m3_per_day">Водоотведение (м³/сутки)</label>
+                        <input id="sewage_m3_per_day" name="sewage_m3_per_day" type="number" min="0" step="0.1" />
+                    </div>
+                </div>
+
+                <div style="height:8px"></div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="heating_gcal_per_h">Отопление (Гкал/ч)</label>
+                        <input id="heating_gcal_per_h" name="heating_gcal_per_h" type="number" min="0" step="0.1" />
+                    </div>
+                    <div class="col">
+                        <label for="steam_bar">Пар (бар)</label>
+                        <input id="steam_bar" name="steam_bar" type="number" min="0" step="0.1" />
+                    </div>
+                    <div class="col">
+                        <label for="additional_requirements">Дополнительные требования</label>
+                        <textarea id="additional_requirements" name="additional_requirements" placeholder="Вентиляция, очистка стоков, сертификация и т.д."></textarea>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 6. Вид деятельности (категория) -->
+            <section class="card" aria-labelledby="activity-title">
+                <h2 id="activity-title">6. Вид деятельности</h2>
+                <div class="row">
+                    <div class="col">
+                        <label for="activity_type">Выберите профиль</label>
+                        <select id="activity_type" name="activity_type">
+                            <option value="">— Выберите —</option>
+                            <option value="пром. производство">Пром. производство</option>
+                            <option value="пищевое производство">Пищевое производство</option>
+                            <option value="с/х производство">Сельскохозяйственное производство</option>
+                            <option value="туризм">Туризм</option>
+                            <option value="придорожный сервис">Придорожный сервис</option>
+                            <option value="торговля">Сфера торговли</option>
+                            <option value="логистика">Логистика / Склад</option>
+                            <option value="it">IT / Цифровые сервисы</option>
+                            <option value="другое">Другое</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Скрытая кнопка для non-webapp (отладка) -->
+            <button type="button" id="submit-fallback">Отправить заявку</button>
         </form>
     </div>
+
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tg = window.Telegram.WebApp;
-          
-            // --- THEME ADAPTATION ---
-            if (tg.colorScheme === 'dark') {
+        document.addEventListener('DOMContentLoaded', function () {
+            const tg = window.Telegram?.WebApp;
+            // Theme
+            if (tg && tg.colorScheme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
             }
-            // Listen for theme changes
-            tg.onEvent('themeChanged', function() {
-                document.documentElement.setAttribute('data-theme', tg.colorScheme);
-            });
-            tg.ready();
-            tg.expand();
-            // --- MAIN BUTTON LOGIC ---
-            const mainButton = tg.MainButton;
-            mainButton.setText("Отправить заявку");
-            mainButton.setParams({
-                color: '#00A950',  // Fixed: hex value for green
-                text_color: '#ffffff'
-            });
-            mainButton.show(); 
-           
+            if (tg) tg.onEvent('themeChanged', () => document.documentElement.setAttribute('data-theme', tg.colorScheme));
+
             const form = document.getElementById('invest-form');
-           
+            const mainButton = tg ? tg.MainButton : null;
+            const submitFallback = document.getElementById('submit-fallback');
+
+            // Configure MainButton if Telegram WebApp available
+            if (mainButton) {
+                mainButton.setText("Отправить заявку");
+                mainButton.setParams({ color: '#00A950', text_color: '#ffffff' });
+                mainButton.show();
+            } else {
+                // для отладки вне Telegram
+                submitFallback.style.display = 'block';
+            }
+
+            function formIsValid() {
+                // базовая валидация: нативное checkValidity достаточно
+                return form.checkValidity();
+            }
+
             function updateButtonState() {
-                const isValid = form.checkValidity();
-                console.log('Form valid:', isValid);  // Debugging log
-                if (isValid) {
-                    mainButton.enable();
+                if (mainButton) {
+                    if (formIsValid()) mainButton.enable(); else mainButton.disable();
                 } else {
-                    mainButton.disable();
+                    submitFallback.disabled = !formIsValid();
                 }
             }
-            // Initial state
+
+            // initial
             updateButtonState();
-            form.addEventListener('input', updateButtonState); 
-            form.addEventListener('change', updateButtonState); 
-           
-            // --- MAINBUTTON CLICK HANDLER ---
-            mainButton.onClick(function() {
-                console.log('MainButton clicked');  // Debugging log
-                if (!form.checkValidity()) {
-                    tg.showAlert('Пожалуйста, заполните все обязательные поля, отмеченные звездочкой (*).');
-                    return;
-                }
-                mainButton.showProgress(); 
-                const formData = new FormData(form);
+            form.addEventListener('input', updateButtonState);
+            form.addEventListener('change', updateButtonState);
+
+            function collectFormData() {
+                // Собираем все поля, включая пустые — чтобы backend получил все ключи
+                const elements = form.querySelectorAll('input,textarea,select');
                 const data = {};
-                formData.forEach((value, key) => {
-                    data[key] = value;
+                elements.forEach(el => {
+                    // для чекбоокс/radio: пока нет — но сохранена общая логика
+                    const name = el.name;
+                    if (!name) return;
+                    if (el.type === 'checkbox') {
+                        data[name] = el.checked;
+                    } else {
+                        data[name] = el.value !== undefined ? el.value : '';
+                    }
                 });
-                tg.sendData(JSON.stringify(data));
-                // Optionally: tg.close() after send
-            });
+                return data;
+            }
+
+            async function sendDataToBot() {
+                const data = collectFormData();
+
+                // Небольшая нормализация: если пользователь выбрал ₽, оставляем как есть — backend сам попытается распознать
+                // Преобразуем пустые строки в "", оставляем числовые строки как есть (backend преобразует)
+                try {
+                    if (mainButton) mainButton.showProgress();
+                    // отправка JSON строкой
+                    const payload = JSON.stringify(data);
+                    if (tg) {
+                        tg.sendData(payload);
+                        // не закрываем WebApp — бот пришлёт ответ в чат
+                    } else {
+                        // fallback: покажем в консоли / можно сделать fetch на отладочный endpoint
+                        console.log("DEBUG payload:", payload);
+                        alert("DEBUG: payload отправлен в консоль (в WebApp этот JSON отправляется боту).");
+                    }
+                } finally {
+                    if (mainButton) mainButton.hideProgress();
+                }
+            }
+
+            if (mainButton) {
+                mainButton.onClick(sendDataToBot);
+            }
+            submitFallback.addEventListener('click', sendDataToBot);
+
+            // Accessibility: focus first required input
+            const firstReq = form.querySelector('[required]');
+            if (firstReq) firstReq.focus();
+
         });
     </script>
 </body>
