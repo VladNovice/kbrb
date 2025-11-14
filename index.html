@@ -9,10 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-green: #00A950; /* Зеленый цвет флага Башкортостана */
-            --tg-color-scheme: light; /* Default theme */
-            
-            /* Telegram System Colors */
+            --primary-green: #00A950;
+            --tg-color-scheme: light;
             --tg-theme-bg-color: #ffffff;
             --tg-theme-text-color: #000000;
             --tg-theme-hint-color: #999999;
@@ -21,8 +19,6 @@
             --tg-theme-button-text-color: #ffffff;
             --tg-theme-secondary-bg-color: #f3f3f3;
         }
-        
-        /* Dark theme adjustments */
         [data-theme="dark"] {
              --tg-theme-bg-color: #18222d;
              --tg-theme-text-color: #ffffff;
@@ -30,216 +26,63 @@
              --tg-theme-link-color: #62bcf9;
              --tg-theme-secondary-bg-color: #212d3b;
         }
-
-        body {
-            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color);
-            color: var(--tg-theme-text-color);
-            margin: 0;
-            padding: 15px;
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-smoothing: grayscale;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .header img {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 8px;
-        }
-
-        .header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            margin: 0;
-        }
-        
-        .header p {
-            font-size: 15px;
-            color: var(--tg-theme-hint-color);
-            margin: 4px 0 0;
-        }
-
-        .form-section {
-            background-color: var(--tg-theme-secondary-bg-color);
-            border-radius: 12px;
-            padding: 1px 15px 15px 15px;
-            margin-bottom: 15px;
-        }
-
-        .form-group {
-            margin-top: 15px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: var(--tg-theme-hint-color);
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            background-color: var(--tg-theme-bg-color);
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 16px;
-            color: var(--tg-theme-text-color);
-            transition: box-shadow 0.2s ease;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px var(--tg-theme-link-color);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 90px;
-        }
-        
-        .form-group small {
-            display: block;
-            margin-top: 6px;
-            color: var(--tg-theme-hint-color);
-            font-size: 13px;
-            padding-left: 5px;
-        }
+        body { font-family: 'Manrope', sans-serif; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); margin: 0; padding: 15px; box-sizing: border-box; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 25px; }
+        .header img { width: 50px; height: 50px; margin-bottom: 8px; }
+        .header h1 { font-size: 22px; font-weight: 700; margin: 0; }
+        .header p { font-size: 15px; color: var(--tg-theme-hint-color); margin: 4px 0 0; }
+        .form-section { background-color: var(--tg-theme-secondary-bg-color); border-radius: 12px; padding: 1px 15px 15px 15px; margin-bottom: 15px; }
+        .form-group { margin-top: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: var(--tg-theme-hint-color); }
+        input, select, textarea { width: 100%; padding: 12px; border: none; background-color: var(--tg-theme-bg-color); border-radius: 8px; box-sizing: border-box; font-size: 16px; color: var(--tg-theme-text-color); }
+        textarea { resize: vertical; min-height: 90px; }
     </style>
 </head>
 <body>
-
     <div class="container">
         <header class="header">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Coat_of_arms_of_Bashkortostan.svg/200px-Coat_of_arms_of_Bashkortostan.svg.png" alt="Герб Республики Башкортостан">
             <h1>Инвестиционный проект</h1>
             <p>Корпорация развития РБ</p>
         </header>
-
         <form id="invest-form">
             <div class="form-section">
-                <div class="form-group">
-                    <label for="project_name">Название проекта *</label>
-                    <input type="text" id="project_name" name="project_name" required placeholder="Например: Эко-отель 'Шихан'">
-                </div>
-                <div class="form-group">
-                    <label for="initiator">Инициатор (компания, руководитель) *</label>
-                    <input type="text" id="initiator" name="initiator" required placeholder="ООО 'БашТуризм', Иванов И.И.">
-                </div>
-                <div class="form-group">
-                    <label for="contacts">Контактная информация *</label>
-                    <textarea id="contacts" name="contacts" required placeholder="ФИО, должность, телефон, email"></textarea>
-                </div>
+                <div class="form-group"><label for="project_name">Название проекта *</label><input type="text" id="project_name" name="project_name" required placeholder="Например: Эко-отель 'Шихан'"></div>
+                <div class="form-group"><label for="initiator">Инициатор *</label><input type="text" id="initiator" name="initiator" required placeholder="ООО 'БашТуризм', Иванов И.И."></div>
+                <div class="form-group"><label for="contacts">Контактная информация *</label><textarea id="contacts" name="contacts" required placeholder="ФИО, должность, телефон, email"></textarea></div>
             </div>
-
             <div class="form-section">
-                <div class="form-group">
-                    <label for="investment_sum">Сумма вложений, млн. руб. *</label>
-                    <input type="number" id="investment_sum" name="investment_sum" required min="0" step="0.1" placeholder="Например: 150.5">
-                </div>
-                <div class="form-group">
-                    <label for="jobs_created">Создаваемые рабочие места, чел. *</label>
-                    <input type="number" id="jobs_created" name="jobs_created" required min="1" placeholder="Например: 25">
-                </div>
+                <div class="form-group"><label for="investment_sum">Сумма вложений, млн. руб. *</label><input type="number" id="investment_sum" name="investment_sum" required min="0" step="0.1" placeholder="150.5"></div>
+                <div class="form-group"><label for="jobs_created">Создаваемые рабочие места, чел. *</label><input type="number" id="jobs_created" name="jobs_created" required min="1" placeholder="25"></div>
             </div>
-
             <div class="form-section">
-                 <div class="form-group">
-                    <label for="activity_type">Вид деятельности</label>
-                    <select id="activity_type" name="activity_type">
-                        <option value="пром. производство">Пром. производство</option>
-                        <option value="пищевое производство">Пищевое производство</option>
-                        <option value="с/х производство">Сельскохозяйственное производство</option>
-                        <option value="туризм">Туризм</option>
-                        <option value="придорожный сервис">Придорожный сервис</option>
-                        <option value="торговля">Сфера торговли</option>
-                        <option value="другое">Другое</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="location">Желаемое местоположение</label>
-                    <input type="text" id="location" name="location" placeholder="Например: г. Уфа, Белебей, Кумертау">
-                    <small>Укажите город или район в РБ.</small>
-                </div>
+                 <div class="form-group"><label for="activity_type">Вид деятельности</label><select id="activity_type" name="activity_type"><option value="пром. производство">Пром. производство</option><option value="пищевое производство">Пищевое производство</option><option value="с/х производство">Сельскохозяйственное производство</option><option value="туризм">Туризм</option><option value="придорожный сервис">Придорожный сервис</option><option value="торговля">Сфера торговли</option><option value="другое">Другое</option></select></div>
+                 <div class="form-group"><label for="location">Желаемое местоположение</label><input type="text" id="location" name="location" placeholder="Например: г. Уфа, Белебей, Кумертау"></div>
             </div>
         </form>
     </div>
-
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const tg = window.Telegram.WebApp;
-            
-            // --- THEME ADAPTATION ---
-            // Set theme based on Telegram's color scheme
-            if (tg.colorScheme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            }
-            // Listen for theme changes
-            tg.onEvent('themeChanged', function() {
-                document.documentElement.setAttribute('data-theme', tg.colorScheme);
-            });
-
+            if (tg.colorScheme === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); }
+            tg.onEvent('themeChanged', function() { document.documentElement.setAttribute('data-theme', tg.colorScheme); });
             tg.ready();
             tg.expand();
-
-            // --- MAIN BUTTON LOGIC ---
             const mainButton = tg.MainButton;
             mainButton.setText("Отправить заявку");
-            mainButton.setParams({
-                color: 'var(--primary-green)',
-                text_color: '#ffffff'
-            });
-            
-            const form = document.getElementById('invest-form');
-            const requiredFields = form.querySelectorAll('[required]');
-
-            function checkFormValidity() {
-                return Array.from(requiredFields).every(field => field.value && field.value.trim() !== '');
-            }
-
-            function updateMainButtonState() {
-                if (checkFormValidity()) {
-                    mainButton.enable();
-                } else {
-                    mainButton.disable();
-                }
-            }
-
-            // Show the button immediately, but it will be disabled or enabled based on the form's state
+            mainButton.setParams({ color: '#00A950', text_color: '#ffffff' });
             mainButton.show();
-            updateMainButtonState(); // Set initial state on load
-
-            form.addEventListener('input', updateMainButtonState); // Check on every input change
-
-            // --- FORM SUBMISSION ---
             mainButton.onClick(function() {
-                if (!checkFormValidity()) {
-                    tg.showAlert('Пожалуйста, заполните все обязательные поля, отмеченные звездочкой (*).');
-                    return;
-                }
-
-                mainButton.showProgress(); // Show loading indicator
-
+                const form = document.getElementById('invest-form');
+                const requiredFields = form.querySelectorAll('[required]');
+                const isFormValid = Array.from(requiredFields).every(field => field.value && field.value.trim() !== '');
+                if (!isFormValid) { tg.showAlert('Пожалуйста, заполните все обязательные поля (*).'); return; }
+                mainButton.showProgress();
                 const formData = new FormData(form);
                 const data = {};
-                formData.forEach((value, key) => {
-                    data[key] = value;
-                });
-
+                formData.forEach((value, key) => { data[key] = value; });
                 tg.sendData(JSON.stringify(data));
             });
         });
