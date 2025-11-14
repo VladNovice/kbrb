@@ -10,13 +10,12 @@
     <style>
         :root {
             --primary-green: #00A950;
+            --primary-green-hover: #009345;
             --tg-color-scheme: light;
             --tg-theme-bg-color: #ffffff;
             --tg-theme-text-color: #000000;
             --tg-theme-hint-color: #999999;
             --tg-theme-link-color: #2481cc;
-            --tg-theme-button-color: var(--primary-green);
-            --tg-theme-button-text-color: #ffffff;
             --tg-theme-secondary-bg-color: #f3f3f3;
         }
         [data-theme="dark"] {
@@ -37,6 +36,29 @@
         label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: var(--tg-theme-hint-color); }
         input, select, textarea { width: 100%; padding: 12px; border: none; background-color: var(--tg-theme-bg-color); border-radius: 8px; box-sizing: border-box; font-size: 16px; color: var(--tg-theme-text-color); }
         textarea { resize: vertical; min-height: 90px; }
+        
+        /* --- СТИЛИ ДЛЯ КНОПКИ ВНУТРИ СТРАНИЦЫ --- */
+        .button-container {
+            margin-top: 25px;
+            padding-bottom: 15px; /* Добавляем отступ снизу */
+        }
+        #submit-button-html {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            background-color: var(--primary-green);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, opacity 0.2s ease;
+        }
+        #submit-button-html:disabled {
+            background-color: #aeb8c2; /* Серый цвет для неактивной кнопки */
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
@@ -46,7 +68,9 @@
             <h1>Инвестиционный проект</h1>
             <p>Корпорация развития РБ</p>
         </header>
+
         <form id="invest-form">
+            <!-- Разделы формы остаются без изменений -->
             <div class="form-section">
                 <div class="form-group"><label for="project_name">Название проекта *</label><input type="text" id="project_name" name="project_name" required placeholder="Например: Эко-отель 'Шихан'"></div>
                 <div class="form-group"><label for="initiator">Инициатор *</label><input type="text" id="initiator" name="initiator" required placeholder="ООО 'БашТуризм', Иванов И.И."></div>
@@ -61,28 +85,49 @@
                  <div class="form-group"><label for="location">Желаемое местоположение</label><input type="text" id="location" name="location" placeholder="Например: г. Уфа, Белебей, Кумертау"></div>
             </div>
         </form>
+        
+        <!-- ВОТ ЭТА КНОПКА НАХОДИТСЯ ВНУТРИ HTML И НЕ ЗАВИСИТ ОТ TELEGRAM -->
+        <div class="button-container">
+            <button id="submit-button-html">Отправить заявку</button>
+        </div>
     </div>
+
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
+        // Весь этот блок работает с HTML-кнопкой, а не с кнопкой Telegram
         document.addEventListener('DOMContentLoaded', function() {
             const tg = window.Telegram.WebApp;
-            if (tg.colorScheme === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); }
-            tg.onEvent('themeChanged', function() { document.documentElement.setAttribute('data-theme', tg.colorScheme); });
+            
             tg.ready();
             tg.expand();
-            const mainButton = tg.MainButton;
-            mainButton.setText("Отправить заявку");
-            mainButton.setParams({ color: '#00A950', text_color: '#ffffff' });
-            mainButton.show();
-            mainButton.onClick(function() {
-                const form = document.getElementById('invest-form');
-                const requiredFields = form.querySelectorAll('[required]');
-                const isFormValid = Array.from(requiredFields).every(field => field.value && field.value.trim() !== '');
-                if (!isFormValid) { tg.showAlert('Пожалуйста, заполните все обязательные поля (*).'); return; }
-                mainButton.showProgress();
+            if (tg.colorScheme === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); }
+            tg.onEvent('themeChanged', function() { document.documentElement.setAttribute('data-theme', tg.colorScheme); });
+
+            const submitButton = document.getElementById('submit-button-html');
+            const form = document.getElementById('invest-form');
+            const requiredFields = form.querySelectorAll('[required]');
+
+            function checkFormValidity() {
+                return Array.from(requiredFields).every(field => field.value && field.value.trim() !== '');
+            }
+
+            function updateButtonState() {
+                submitButton.disabled = !checkFormValidity();
+            }
+
+            updateButtonState();
+            form.addEventListener('input', updateButtonState);
+
+            submitButton.addEventListener('click', function() {
+                if (!checkFormValidity()) {
+                    tg.showAlert('Пожалуйста, заполните все обязательные поля (*).');
+                    return;
+                }
+
                 const formData = new FormData(form);
                 const data = {};
                 formData.forEach((value, key) => { data[key] = value; });
+
                 tg.sendData(JSON.stringify(data));
             });
         });
