@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Заявка на инвестиционный проект</title>
+<style>
+:root {
+--tg-theme-bg-color: #ffffff;
+--tg-theme-text-color: #000000;
+--tg-theme-hint-color: #999999;
+--tg-theme-link-color: #2481cc;
+--tg-theme-button-color: #2481cc;
+--tg-theme-button-text-color: #ffffff;
+--tg-theme-secondary-bg-color: #f4f4f5;
+}
+body {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+background-color: var(--tg-theme-bg-color, #ffffff);
+color: var(--tg-theme-text-color, #000000);
+margin: 0;
+padding: 20px;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+.container {
+max-width: 600px;
+margin: 0 auto;
+}
+h1 {
+text-align: center;
+color: var(--tg-theme-text-color, #000000);
+font-size: 24px;
+margin-bottom: 25px;
+}
+.form-group {
+margin-bottom: 20px;
+}
+label {
+display: block;
+font-weight: 600;
+margin-bottom: 8px;
+color: var(--tg-theme-hint-color, #999999);
+}
+input, select, textarea {
+width: 100%;
+padding: 12px;
+border: 1px solid var(--tg-theme-secondary-bg-color, #f4f4f5);
+background-color: var(--tg-theme-secondary-bg-color, #f4f4f5);
+border-radius: 8px;
+box-sizing: border-box;
+font-size: 16px;
+color: var(--tg-theme-text-color, #000000);
+}
+input:focus, select:focus, textarea:focus {
+outline: none;
+border-color: var(--tg-theme-link-color, #2481cc);
+}
+textarea {
+resize: vertical;
+min-height: 100px;
+}
+.form-group small {
+display: block;
+margin-top: 5px;
+color: var(--tg-theme-hint-color, #999999);
+font-size: 13px;
+}
+</style>
+</head>
+<body>
+code Code
+
+    
+<div class="container">
+    <h1>Заявка на проект</h1>
+    <form id="invest-form">
+        <!-- Основная информация -->
+        <div class="form-group">
+            <label for="project_name">Инвестиционный проект (название) *</label>
+            <input type="text" id="project_name" name="project_name" required>
+        </div>
+        <div class="form-group">
+            <label for="initiator">Инициатор проекта (название компании, руководитель) *</label>
+            <input type="text" id="initiator" name="initiator" required>
+        </div>
+        <div class="form-group">
+            <label for="contacts">Контактная информация (ФИО, должность, телефон, email) *</label>
+            <textarea id="contacts" name="contacts" required></textarea>
+        </div>
+
+        <!-- Финансовые показатели -->
+        <div class="form-group">
+            <label for="investment_sum">Сумма капитальных вложений, млн. руб. *</label>
+            <input type="number" id="investment_sum" name="investment_sum" required min="0" step="0.1" placeholder="Например: 150.5">
+        </div>
+        <div class="form-group">
+            <label for="financing_source">Источники финансирования</label>
+            <select id="financing_source" name="financing_source">
+                <option value="собственные">Собственные</option>
+                <option value="заемные">Заемные</option>
+                <option value="смешанные">Собственные/Заемные</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="jobs_created">Создаваемые рабочие места, чел. *</label>
+            <input type="number" id="jobs_created" name="jobs_created" required min="1">
+        </div>
+
+        <!-- Детали проекта -->
+        <div class="form-group">
+            <label for="development_stage">Стадия разработки</label>
+            <select id="development_stage" name="development_stage">
+                <option value="прединвестиционное">Прединвестиционное</option>
+                <option value="инвестиционное">Инвестиционное</option>
+                <option value="эксплуатационный">Эксплуатационный</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="activity_type">Вид планируемой деятельности</label>
+            <select id="activity_type" name="activity_type">
+                <option value="пром. производство">Пром. производство</option>
+                <option value="пищевое производство">Пищевое производство</option>
+                <option value="с/х производство">Сельскохозяйственное производство</option>
+                <option value="туризм">Туризм</option>
+                <option value="придорожный сервис">Придорожный сервис</option>
+                <option value="торговля">Сфера торговли</option>
+                <option value="другое">Другое</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="location">Желаемое местоположение (МР в РБ)</label>
+            <input type="text" id="location" name="location" placeholder="Например: г. Уфа, Белебей, Кумертау">
+            <small>Укажите город или муниципальный район.</small>
+        </div>
+    </form>
+</div>
+
+<!-- Скрипт для взаимодействия с Telegram -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand(); // Раскрываем Mini App на всю высоту
+
+        // Настраиваем главную кнопку
+        tg.MainButton.text = "Отправить заявку";
+        
+        const form = document.getElementById('invest-form');
+        const requiredFields = form.querySelectorAll('[required]');
+
+        function checkFormValidity() {
+            let allValid = true;
+            requiredFields.forEach(field => {
+                if (!field.value || field.value.trim() === '') {
+                    allValid = false;
+                }
+            });
+            return allValid;
+        }
+
+        function toggleMainButton() {
+            if (checkFormValidity()) {
+                tg.MainButton.show();
+            } else {
+                tg.MainButton.hide();
+            }
+        }
+
+        // Проверяем форму при загрузке и при каждом изменении
+        toggleMainButton();
+        form.addEventListener('input', toggleMainButton);
+
+        // Обработчик нажатия на главную кнопку
+        tg.onEvent('mainButtonClicked', function() {
+            if (!checkFormValidity()) {
+                tg.showAlert('Пожалуйста, заполните все обязательные поля (*).');
+                return;
+            }
+
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Отправляем данные в JSON-формате боту
+            tg.sendData(JSON.stringify(data));
+        });
+    });
+</script>
+
+  
+
+</body>
+</html>
