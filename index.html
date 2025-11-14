@@ -11,7 +11,7 @@
         :root {
             --primary-green: #00A950; /* Зеленый цвет флага Башкортостана */
             --tg-color-scheme: light; /* Default theme */
-            
+           
             /* Telegram System Colors */
             --tg-theme-bg-color: #ffffff;
             --tg-theme-text-color: #000000;
@@ -21,7 +21,7 @@
             --tg-theme-button-text-color: #ffffff;
             --tg-theme-secondary-bg-color: #f3f3f3;
         }
-        
+       
         /* Dark theme adjustments */
         [data-theme="dark"] {
              --tg-theme-bg-color: #18222d;
@@ -30,7 +30,6 @@
              --tg-theme-link-color: #62bcf9;
              --tg-theme-secondary-bg-color: #212d3b;
         }
-
         body {
             font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--tg-theme-bg-color);
@@ -41,46 +40,39 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-smoothing: grayscale;
         }
-
         .container {
             max-width: 600px;
             margin: 0 auto;
         }
-
         .header {
             text-align: center;
             margin-bottom: 25px;
         }
-
         .header img {
             width: 50px;
             height: 50px;
             margin-bottom: 8px;
         }
-
         .header h1 {
             font-size: 22px;
             font-weight: 700;
             margin: 0;
         }
-        
+       
         .header p {
             font-size: 15px;
             color: var(--tg-theme-hint-color);
             margin: 4px 0 0;
         }
-
         .form-section {
             background-color: var(--tg-theme-secondary-bg-color);
             border-radius: 12px;
             padding: 1px 15px 15px 15px;
             margin-bottom: 15px;
         }
-
         .form-group {
             margin-top: 15px;
         }
-
         label {
             display: block;
             font-weight: 600;
@@ -88,7 +80,6 @@
             font-size: 14px;
             color: var(--tg-theme-hint-color);
         }
-
         input, select, textarea {
             width: 100%;
             padding: 12px;
@@ -100,17 +91,15 @@
             color: var(--tg-theme-text-color);
             transition: box-shadow 0.2s ease;
         }
-
         input:focus, select:focus, textarea:focus {
             outline: none;
             box-shadow: 0 0 0 2px var(--tg-theme-link-color);
         }
-
         textarea {
             resize: vertical;
             min-height: 90px;
         }
-        
+       
         .form-group small {
             display: block;
             margin-top: 6px;
@@ -118,17 +107,36 @@
             font-size: 13px;
             padding-left: 5px;
         }
+        /* Стили для кнопки отправки */
+        #submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 15px;
+        }
+        #submit-btn:disabled {
+            background-color: var(--tg-theme-hint-color);
+            cursor: not-allowed;
+        }
+        #submit-btn:hover:not(:disabled) {
+            background-color: darken(var(--tg-theme-button-color), 10%);
+        }
     </style>
 </head>
 <body>
-
     <div class="container">
         <header class="header">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Coat_of_arms_of_Bashkortostan.svg/200px-Coat_of_arms_of_Bashkortostan.svg.png" alt="Герб Республики Башкортостан">
             <h1>Инвестиционный проект</h1>
             <p>Корпорация развития РБ</p>
         </header>
-
         <form id="invest-form">
             <div class="form-section">
                 <div class="form-group">
@@ -144,7 +152,6 @@
                     <textarea id="contacts" name="contacts" required placeholder="ФИО, должность, телефон, email"></textarea>
                 </div>
             </div>
-
             <div class="form-section">
                 <div class="form-group">
                     <label for="investment_sum">Сумма вложений, млн. руб. *</label>
@@ -155,7 +162,6 @@
                     <input type="number" id="jobs_created" name="jobs_created" required min="1" placeholder="Например: 25">
                 </div>
             </div>
-
             <div class="form-section">
                  <div class="form-group">
                     <label for="activity_type">Вид деятельности</label>
@@ -175,14 +181,15 @@
                     <small>Укажите город или район в РБ.</small>
                 </div>
             </div>
+            <!-- Добавленная кнопка отправки -->
+            <button type="button" id="submit-btn" disabled>Отправить заявку</button>
         </form>
     </div>
-
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const tg = window.Telegram.WebApp;
-            
+           
             // --- THEME ADAPTATION ---
             // Set theme based on Telegram's color scheme
             if (tg.colorScheme === 'dark') {
@@ -192,55 +199,56 @@
             tg.onEvent('themeChanged', function() {
                 document.documentElement.setAttribute('data-theme', tg.colorScheme);
             });
-
             tg.ready();
             tg.expand();
-
-            // --- MAIN BUTTON LOGIC ---
+            // --- MAIN BUTTON LOGIC (опционально, можно закомментировать если не нужен) ---
             const mainButton = tg.MainButton;
             mainButton.setText("Отправить заявку");
             mainButton.setParams({
                 color: 'var(--primary-green)',
                 text_color: '#ffffff'
             });
+            mainButton.show(); // Показываем MainButton
             
             const form = document.getElementById('invest-form');
             const requiredFields = form.querySelectorAll('[required]');
-
+            const submitBtn = document.getElementById('submit-btn');
+            
             function checkFormValidity() {
                 return Array.from(requiredFields).every(field => field.value && field.value.trim() !== '');
             }
-
-            function updateMainButtonState() {
+            function updateButtonState() {
                 if (checkFormValidity()) {
+                    submitBtn.disabled = false;
                     mainButton.enable();
                 } else {
+                    submitBtn.disabled = true;
                     mainButton.disable();
                 }
             }
-
-            // Show the button immediately, but it will be disabled or enabled based on the form's state
-            mainButton.show();
-            updateMainButtonState(); // Set initial state on load
-
-            form.addEventListener('input', updateMainButtonState); // Check on every input change
-
-            // --- FORM SUBMISSION ---
-            mainButton.onClick(function() {
+            // Начальное состояние
+            updateButtonState();
+            form.addEventListener('input', updateButtonState); // Обновляем на каждый ввод
+            
+            // --- ОБРАБОТКА КЛИКА НА HTML-КНОПКУ ---
+            submitBtn.addEventListener('click', function() {
                 if (!checkFormValidity()) {
                     tg.showAlert('Пожалуйста, заполните все обязательные поля, отмеченные звездочкой (*).');
                     return;
                 }
-
-                mainButton.showProgress(); // Show loading indicator
-
+                mainButton.showProgress(); // Показываем прогресс на MainButton (для consistency)
                 const formData = new FormData(form);
                 const data = {};
                 formData.forEach((value, key) => {
                     data[key] = value;
                 });
-
                 tg.sendData(JSON.stringify(data));
+                // Опционально: tg.close() после отправки, но бот обработает
+            });
+            
+            // Синхронизация с MainButton (если клик на MainButton, то же самое)
+            mainButton.onClick(function() {
+                submitBtn.click(); // Вызываем клик на HTML-кнопке для единой логики
             });
         });
     </script>
