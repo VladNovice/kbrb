@@ -6,47 +6,36 @@
     <title>Заявка на проект</title>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Стили остаются те же, что и в прошлой версии с кнопкой внутри */
         :root { --primary-green: #00A950; --tg-theme-bg-color: #ffffff; --tg-theme-text-color: #000000; --tg-theme-hint-color: #999999; --tg-theme-secondary-bg-color: #f3f3f3; }
         [data-theme="dark"] { --tg-theme-bg-color: #18222d; --tg-theme-text-color: #ffffff; --tg-theme-hint-color: #aaaaaa; --tg-theme-secondary-bg-color: #212d3b; }
         body { font-family: 'Manrope', sans-serif; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); margin: 0; padding: 15px; box-sizing: border-box; }
         .container { max-width: 600px; margin: 0 auto; }
         .header { text-align: center; margin-bottom: 25px; }
-        .header img { width: 50px; height: 50px; margin-bottom: 8px; }
+        .header img { width: 50px; height: 50px; }
         .header h1 { font-size: 22px; font-weight: 700; margin: 0; }
-        .header p { font-size: 15px; color: var(--tg-theme-hint-color); margin: 4px 0 0; }
         .form-section { background-color: var(--tg-theme-secondary-bg-color); border-radius: 12px; padding: 1px 15px 15px 15px; margin-bottom: 15px; }
         .form-group { margin-top: 15px; }
         label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: var(--tg-theme-hint-color); }
         input, select, textarea { width: 100%; padding: 12px; border: none; background-color: var(--tg-theme-bg-color); border-radius: 8px; box-sizing: border-box; font-size: 16px; color: var(--tg-theme-text-color); }
         #submit-button-html { width: 100%; padding: 14px 20px; font-size: 16px; font-weight: 700; color: white; background-color: var(--primary-green); border: none; border-radius: 12px; cursor: pointer; margin-top: 10px; }
-        #result-container { display: none; padding: 15px; border: 2px dashed var(--primary-green); border-radius: 12px; }
-        #result-text { width: 100%; min-height: 200px; border: 1px solid var(--tg-theme-hint-color); border-radius: 8px; padding: 10px; box-sizing: border-box; }
+        #submit-button-html:disabled { background-color: #aeb8c2; cursor: not-allowed; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="form-container">
-            <header class="header">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Coat_of_arms_of_Bashkortostan.svg/200px-Coat_of_arms_of_Bashkortostan.svg.png" alt="Герб">
-                <h1>Инвестиционный проект</h1>
-                <p>Корпорация развития РБ</p>
-            </header>
-            <form id="invest-form">
-                <div class="form-section">
-                    <div class="form-group"><label for="project_name">Название проекта</label><input type="text" id="project_name" name="project_name" value="Тестовый проект"></div>
-                    <div class="form-group"><label for="investment_sum">Сумма вложений, млн. руб.</label><input type="number" id="investment_sum" name="investment_sum" value="150"></div>
-                    <div class="form-group"><label for="location">Желаемое местоположение</label><input type="text" id="location" name="location" value="г. Уфа"></div>
-                </div>
-            </form>
-            <button id="submit-button-html">Сформировать заявку</button>
-        </div>
-
-        <div id="result-container">
-            <h2>Ваша заявка готова!</h2>
-            <p><b>Шаг 1:</b> Нажмите кнопку "Копировать".<br><b>Шаг 2:</b> Закройте это окно.<br><b>Шаг 3:</b> Вставьте скопированный текст в чат с ботом.</p>
-            <textarea id="result-text" readonly></textarea>
-            <button id="copy-button-html">Копировать</button>
-        </div>
+        <header class="header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Coat_of_arms_of_Bashkortostan.svg/200px-Coat_of_arms_of_Bashkortostan.svg.png" alt="Герб">
+            <h1>Инвестиционный проект</h1>
+        </header>
+        <form id="invest-form">
+            <!-- Форма остается без изменений -->
+             <div class="form-section">
+                <div class="form-group"><label for="project_name">Название проекта *</label><input type="text" id="project_name" name="project_name" required placeholder="Например: Эко-отель 'Шихан'"></div>
+                <div class="form-group"><label for="initiator">Инициатор *</label><input type="text" id="initiator" name="initiator" required placeholder="ООО 'БашТуризм', Иванов И.И."></div>
+            </div>
+        </form>
+        <button id="submit-button-html">Отправить заявку</button>
     </div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -55,25 +44,45 @@
             const tg = window.Telegram.WebApp;
             tg.ready();
 
-            document.getElementById('submit-button-html').addEventListener('click', function() {
-                const form = document.getElementById('invest-form');
+            const submitButton = document.getElementById('submit-button-html');
+            const form = document.getElementById('invest-form');
+
+            submitButton.addEventListener('click', async function() {
                 const formData = new FormData(form);
-                
-                let text_data = "### ЗАЯВКА НА ПРОЕКТ ###\n";
-                text_data += `Название проекта: ${formData.get('project_name')}\n`;
-                text_data += `Сумма инвестиций: ${formData.get('investment_sum')}\n`;
-                text_data += `Местоположение: ${formData.get('location')}\n`;
+                const data = {};
+                formData.forEach((value, key) => { data[key] = value; });
 
-                document.getElementById('result-text').value = text_data;
-                document.getElementById('form-container').style.display = 'none';
-                document.getElementById('result-container').style.display = 'block';
-            });
+                // Отключаем кнопку, чтобы избежать повторных нажатий
+                submitButton.disabled = true;
+                submitButton.textContent = 'Отправка...';
 
-            document.getElementById('copy-button-html').addEventListener('click', function() {
-                const resultText = document.getElementById('result-text');
-                resultText.select();
-                document.execCommand('copy');
-                tg.showAlert('Текст заявки скопирован! Теперь закройте это окно и вставьте его в чат.');
+                try {
+                    // Отправляем данные напрямую на наш сервер
+                    const response = await fetch('ВАША_ССЫЛКА_ОТ_NGROK/submit', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            userId: tg.initDataUnsafe?.user?.id,
+                            formData: data
+                        })
+                    });
+
+                    if (response.ok) {
+                        // Если все хорошо, показываем сообщение и закрываем Mini App
+                        tg.showAlert('Ваша заявка успешно отправлена! Ответ придет в чат с ботом.');
+                        tg.close();
+                    } else {
+                        // Если сервер вернул ошибку
+                        tg.showAlert('Произошла ошибка при отправке. Попробуйте позже.');
+                    }
+                } catch (error) {
+                    // Если произошла сетевая ошибка
+                    tg.showAlert('Ошибка сети. Не удалось связаться с сервером.');
+                } finally {
+                    // Включаем кнопку обратно в любом случае
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Отправить заявку';
+                }
             });
         });
     </script>
