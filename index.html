@@ -3,24 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Заявка на инвестиционный проект</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Заявка на проект</title>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-green: #00A950;
-            --tg-theme-bg-color: #ffffff;
-            --tg-theme-text-color: #000000;
-            --tg-theme-hint-color: #999999;
-            --tg-theme-secondary-bg-color: #f3f3f3;
-        }
-        [data-theme="dark"] {
-             --tg-theme-bg-color: #18222d;
-             --tg-theme-text-color: #ffffff;
-             --tg-theme-hint-color: #aaaaaa;
-             --tg-theme-secondary-bg-color: #212d3b;
-        }
+        :root { --primary-green: #00A950; --tg-theme-bg-color: #ffffff; --tg-theme-text-color: #000000; --tg-theme-hint-color: #999999; --tg-theme-secondary-bg-color: #f3f3f3; }
+        [data-theme="dark"] { --tg-theme-bg-color: #18222d; --tg-theme-text-color: #ffffff; --tg-theme-hint-color: #aaaaaa; --tg-theme-secondary-bg-color: #212d3b; }
         body { font-family: 'Manrope', sans-serif; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); margin: 0; padding: 15px; box-sizing: border-box; }
         .container { max-width: 600px; margin: 0 auto; }
         .header { text-align: center; margin-bottom: 25px; }
@@ -31,62 +18,62 @@
         .form-group { margin-top: 15px; }
         label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: var(--tg-theme-hint-color); }
         input, select, textarea { width: 100%; padding: 12px; border: none; background-color: var(--tg-theme-bg-color); border-radius: 8px; box-sizing: border-box; font-size: 16px; color: var(--tg-theme-text-color); }
-        .button-container { margin-top: 25px; }
-        #submit-button-html { width: 100%; padding: 14px 20px; font-size: 16px; font-weight: 700; color: white; background-color: var(--primary-green); border: none; border-radius: 12px; cursor: pointer; }
+        #submit-button-html { width: 100%; padding: 14px 20px; font-size: 16px; font-weight: 700; color: white; background-color: var(--primary-green); border: none; border-radius: 12px; cursor: pointer; margin-top: 10px; }
+        #result-container { display: none; padding: 15px; border: 2px dashed var(--primary-green); border-radius: 12px; }
+        #result-text { width: 100%; min-height: 200px; border: 1px solid var(--tg-theme-hint-color); border-radius: 8px; padding: 10px; box-sizing: border-box; }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Coat_of_arms_of_Bashkortostan.svg/200px-Coat_of_arms_of_Bashkortostan.svg.png" alt="Герб Республики Башкортостан">
-            <h1>Инвестиционный проект</h1>
-            <p>Корпорация развития РБ</p>
-        </header>
-        <form id="invest-form">
-            <div class="form-section">
-                <div class="form-group"><label for="project_name">Название проекта *</label><input type="text" id="project_name" name="project_name" required placeholder="Например: Эко-отель 'Шихан'"></div>
-                <div class="form-group"><label for="initiator">Инициатор *</label><input type="text" id="initiator" name="initiator" required placeholder="ООО 'БашТуризм', Иванов И.И."></div>
-                <div class="form-group"><label for="contacts">Контактная информация *</label><textarea id="contacts" name="contacts" required placeholder="ФИО, должность, телефон, email"></textarea></div>
-            </div>
-            <div class="form-section">
-                <div class="form-group"><label for="investment_sum">Сумма вложений, млн. руб. *</label><input type="number" id="investment_sum" name="investment_sum" required min="0" step="0.1" placeholder="150.5"></div>
-                <div class="form-group"><label for="jobs_created">Создаваемые рабочие места, чел. *</label><input type="number" id="jobs_created" name="jobs_created" required min="1" placeholder="25"></div>
-            </div>
-        </form>
-        <div class="button-container">
-            <button id="submit-button-html">Отправить заявку</button>
+        <div id="form-container">
+            <header class="header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Coat_of_arms_of_Bashkortostan.svg/200px-Coat_of_arms_of_Bashkortostan.svg.png" alt="Герб">
+                <h1>Инвестиционный проект</h1>
+                <p>Корпорация развития РБ</p>
+            </header>
+            <form id="invest-form">
+                <div class="form-section">
+                    <div class="form-group"><label for="project_name">Название проекта</label><input type="text" id="project_name" name="project_name" value="Тестовый проект"></div>
+                    <div class="form-group"><label for="investment_sum">Сумма вложений, млн. руб.</label><input type="number" id="investment_sum" name="investment_sum" value="150"></div>
+                    <div class="form-group"><label for="location">Желаемое местоположение</label><input type="text" id="location" name="location" value="г. Уфа"></div>
+                </div>
+            </form>
+            <button id="submit-button-html">Сформировать заявку</button>
+        </div>
+
+        <div id="result-container">
+            <h2>Ваша заявка готова!</h2>
+            <p><b>Шаг 1:</b> Нажмите кнопку "Копировать".<br><b>Шаг 2:</b> Закройте это окно.<br><b>Шаг 3:</b> Вставьте скопированный текст в чат с ботом.</p>
+            <textarea id="result-text" readonly></textarea>
+            <button id="copy-button-html">Копировать</button>
         </div>
     </div>
+
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const tg = window.Telegram.WebApp;
             tg.ready();
-            if (tg.colorScheme === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); }
-            tg.onEvent('themeChanged', function() { document.documentElement.setAttribute('data-theme', tg.colorScheme); });
 
             document.getElementById('submit-button-html').addEventListener('click', function() {
-                // --- ВАЖНО: Вставьте сюда точный юзернейм вашего бота ---
-                const BOT_USERNAME = "InvestBashkortostan_bot"; 
-
                 const form = document.getElementById('invest-form');
-                const requiredFields = form.querySelectorAll('[required]');
-                const isFormValid = Array.from(requiredFields).every(field => field.value && field.value.trim() !== '');
-
-                if (!isFormValid) {
-                    tg.showAlert('Пожалуйста, заполните все обязательные поля (*).');
-                    return;
-                }
-
                 const formData = new FormData(form);
-                const data = {};
-                formData.forEach((value, key) => { data[key] = value; });
-
-                const encodedData = btoa(JSON.stringify(data));
-                const deepLink = `https://t.me/${BOT_USERNAME}?start=${encodedData}`;
                 
-                // Вместо sendData мы просто переходим по ссылке
-                window.location.href = deepLink;
+                let text_data = "### ЗАЯВКА НА ПРОЕКТ ###\n";
+                text_data += `Название проекта: ${formData.get('project_name')}\n`;
+                text_data += `Сумма инвестиций: ${formData.get('investment_sum')}\n`;
+                text_data += `Местоположение: ${formData.get('location')}\n`;
+
+                document.getElementById('result-text').value = text_data;
+                document.getElementById('form-container').style.display = 'none';
+                document.getElementById('result-container').style.display = 'block';
+            });
+
+            document.getElementById('copy-button-html').addEventListener('click', function() {
+                const resultText = document.getElementById('result-text');
+                resultText.select();
+                document.execCommand('copy');
+                tg.showAlert('Текст заявки скопирован! Теперь закройте это окно и вставьте его в чат.');
             });
         });
     </script>
