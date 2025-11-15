@@ -330,12 +330,13 @@
             const params = new URLSearchParams(window.location.search);
             const projectId = params.get('project_id');
 
-            if (projectId) {
+            if (projectId && projectId !== 'null') {
                 document.querySelector('header h1').textContent = 'Редактирование проекта';
                 if (mainButton) mainButton.setText('Сохранить изменения');
                 
                 try {
-                    const dataUrl = `https://988c-95-55-236-248.ngrok-free.app/get_project?project_id=${projectId}&init_data=${encodeURIComponent(tg.initData || '')}`;
+                    // Теперь этот код будет вызываться только при редактировании
+                    const dataUrl = `https://cubistic-nonevadingly-connie.ngrok-free.dev/get_project?project_id=${projectId}&init_data=${encodeURIComponent(tg.initData || '')}`;
                     
                     
                     const response = await fetch(dataUrl);
@@ -432,6 +433,7 @@
     </script>
 </body>
 </html>
+
 
 
 
