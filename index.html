@@ -335,7 +335,8 @@
                 if (mainButton) mainButton.setText('Сохранить изменения');
                 
                 try {
-                    const dataUrl = `https://cubistic-nonevadingly-connie.ngrok-free.dev/get_project?project_id=${projectId}&init_data=${encodeURIComponent(tg.initData || '')}`;
+                    const dataUrl = `https://988c-95-55-236-248.ngrok-free.app/get_project?project_id=${projectId}&init_data=${encodeURIComponent(tg.initData || '')}`;
+                    
                     
                     const response = await fetch(dataUrl);
                     if (response.ok) {
@@ -387,7 +388,7 @@
             async function sendDataViaBackend() {
                 if (!form.checkValidity()) return;
 
-                const BACKEND_URL = `https://cubistic-nonevadingly-connie.ngrok-free.dev/get_project?project_id=${projectId}&init_data=${encodeURIComponent(tg.initData || '')}`;
+                const BACKEND_URL = `https://988c-95-55-236-248.ngrok-free.app/get_project?project_id=${projectId}&init_data=${encodeURIComponent(tg.initData || '')}`;
                 const formData = collectFormData();
                 if (projectId) {
                     formData.project_id = projectId;
@@ -431,5 +432,6 @@
     </script>
 </body>
 </html>
+
 
 
