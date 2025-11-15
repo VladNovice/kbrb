@@ -398,85 +398,92 @@
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const tg = window.Telegram?.WebApp;
-            if (!tg) {
-                console.warn("Telegram WebApp script not loaded or not in Telegram environment.");
-                // Для отладки в браузере можно включить темную тему вручную
-                // document.documentElement.style.setProperty('--tg-theme-bg-color', '#18222d');
-                // document.documentElement.style.setProperty('--tg-theme-secondary-bg-color', '#212d3b');
-                // document.documentElement.style.setProperty('--tg-theme-text-color', '#ffffff');
-                // document.documentElement.style.setProperty('--tg-theme-hint-color', '#99a2ad');
-            }
+    document.addEventListener('DOMContentLoaded', function () {
+        // Проверяем, существует ли объект Telegram WebApp
+        const tg = window.Telegram?.WebApp;
+
+        if (tg) {
+            // Если мы внутри Telegram, выполняем эти действия
+            tg.expand(); // Раскрываем приложение на весь экран
+        } else {
+            // Если мы в обычном браузере, выводим предупреждение в консоль
+            console.warn("Telegram WebApp script not loaded or not in Telegram environment. Fallback button will be shown.");
+        }
+
+        const form = document.getElementById('invest-form');
+        const submitFallback = document.getElementById('submit-fallback');
+        
+        // Проверяем, существует ли именно MainButton
+        if (tg && tg.MainButton) {
+            const mainButton = tg.MainButton;
+            mainButton.setText("Отправить заявку");
+            mainButton.setParams({ 
+                color: 'var(--tg-theme-button-color)', 
+                text_color: 'var(--tg-theme-button-text-color)' 
+            });
+            mainButton.show();
             
-            // Telegram сам применит свои переменные, дополнительная логика для темы не нужна
-            tg?.expand(); // Раскрываем приложение на весь экран
+            mainButton.onClick(sendDataToBot);
 
-            const form = document.getElementById('invest-form');
-            const mainButton = tg?.MainButton;
-            const submitFallback = document.getElementById('submit-fallback');
-
-            if (mainButton) {
-                mainButton.setText("Отправить заявку");
-                // Используем нативный цвет кнопки из темы Telegram!
-                mainButton.setParams({ color: 'var(--tg-theme-button-color)', text_color: 'var(--tg-theme-button-text-color)' });
-                mainButton.show();
-            } else {
+        } else {
+            // Если MainButton нет (мы в браузере), показываем нашу резервную кнопку
+            if (submitFallback) {
                 submitFallback.style.display = 'block';
+                submitFallback.addEventListener('click', sendDataToBot);
+            }
+        }
+
+        function formIsValid() {
+            return form.checkValidity();
+        }
+
+        function updateButtonState() {
+            const isValid = formIsValid();
+            if (tg && tg.MainButton) {
+                if (isValid) tg.MainButton.enable(); else tg.MainButton.disable();
+            }
+            if (submitFallback) {
+                submitFallback.disabled = !isValid;
+            }
+        }
+
+        form.addEventListener('input', updateButtonState);
+        updateButtonState();
+
+        async function sendDataToBot() {
+            if (!formIsValid()) {
+                const firstInvalidField = form.querySelector(':invalid');
+                if (firstInvalidField) {
+                    firstInvalidField.focus();
+                }
+                if (tg) tg.HapticFeedback.notificationOccurred('error');
+                return;
             }
 
-            function formIsValid() {
-                return form.checkValidity();
-            }
-
-            function updateButtonState() {
-                const isValid = formIsValid();
-                if (mainButton) {
-                    if (isValid) mainButton.enable(); else mainButton.disable();
-                }
-                if(submitFallback) {
-                    submitFallback.disabled = !isValid;
-                }
-            }
-
-            form.addEventListener('input', updateButtonState);
-            updateButtonState();
-
-            async function sendDataToBot() {
-                if (!formIsValid()) {
-                    const firstInvalidField = form.querySelector(':invalid');
-                    if (firstInvalidField) {
-                        firstInvalidField.focus();
-                    }
-                    tg?.HapticFeedback.notificationOccurred('error');
-                    return;
-                }
-
-                const formData = new FormData(form);
-                const data = Object.fromEntries(formData.entries());
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                if (tg && tg.MainButton) tg.MainButton.showProgress();
                 
-                try {
-                    mainButton?.showProgress();
-                    const payload = JSON.stringify(data);
-                    
-                    if (tg) {
-                        tg.sendData(payload);
-                    } else {
-                        console.log("DEBUG payload:", payload);
-                        alert("Данные для отправки выведены в консоль.");
-                    }
-                } finally {
-                    mainButton?.hideProgress();
+                const payload = JSON.stringify(data);
+                
+                if (tg) {
+                    tg.sendData(payload);
+                } else {
+                    console.log("DEBUG payload:", payload);
+                    alert("Данные для отправки выведены в консоль.");
                 }
+            } finally {
+                if (tg && tg.MainButton) tg.MainButton.hideProgress();
             }
+        }
 
-            mainButton?.onClick(sendDataToBot);
-            submitFallback.addEventListener('click', sendDataToBot);
-
-            const firstInput = form.querySelector('input:not([type="hidden"]), textarea, select');
-            if (firstInput) firstInput.focus();
-        });
-    </script>
+        const firstInput = form.querySelector('input:not([type="hidden"]), textarea, select');
+        if (firstInput) firstInput.focus();
+    });
+</script>
 </body>
 </html>
+
 
