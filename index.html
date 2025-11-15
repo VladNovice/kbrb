@@ -47,7 +47,11 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .container { max-width: 800px; margin: 0 auto; }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding-top: 15px; /* ИЗМЕНЕНИЕ ЗДЕСЬ */
+        }
 
         .progress-wrapper {
             position: sticky;
@@ -127,13 +131,8 @@
             gap: 18px;
         }
         
-        /* !!! ГАРАНТИРОВАННОЕ ИСПРАВЛЕНИЕ ДЛЯ ИНЖЕНЕРНЫХ ПОЛЕЙ !!! */
-        /* Нацеливаемся только на сетку внутри выпадающего блока <details> */
         details .form-grid {
-            /* На экранах шире 768px... */
             @media (min-width: 768px) {
-                /* ...принудительно создаём 3 колонки одинаковой ширины. */
-                /* Это создаст идеальную сетку 2x3 и не даст полям растягиваться. */
                 grid-template-columns: repeat(3, 1fr);
             }
         }
@@ -241,7 +240,6 @@
         </header>
 
         <form id="invest-form" autocomplete="on" novalidate>
-            <!-- ... (секции 1, 2, 3 без изменений) ... -->
             <section class="card">
                 <h2>1. Базовые сведения</h2>
                 <div class="form-grid">
@@ -282,7 +280,6 @@
             <details class="card">
                 <summary>Продвинутые параметры (инженерия)</summary>
                 <div class="details-content">
-                    <!-- Эта сетка теперь будет подчиняться новому, более жёсткому правилу в CSS -->
                     <div class="form-grid">
                         <div class="form-field"><label for="hazard_class">Класс опасности</label><select id="hazard_class" name="hazard_class"><option value="">— Не указывать —</option><option value="1">1 (мин)</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5 (макс)</option></select></div>
                         <div class="form-field"><label for="gas_m3_per_h">Газ (м³/час)</label><input id="gas_m3_per_h" name="gas_m3_per_h" type="number" min="0" step="0.1"/></div>
@@ -300,7 +297,7 @@
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        // ... (весь JavaScript код остается без изменений) ...
+        // ... (JavaScript код остается без изменений) ...
         document.addEventListener('DOMContentLoaded', async function () {
             const tg = window.Telegram?.WebApp;
             const form = document.getElementById('invest-form');
