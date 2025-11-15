@@ -63,8 +63,9 @@
             background-color: var(--tg-theme-bg-color);
             padding: 4px 0;
             transition: background-color 0.3s ease;
-            display: none; /* ИЗМЕНЕНИЕ ЗДЕСЬ: Скрываем всю секцию с прогрессом */
+            display: none; 
         }
+        /* Стили прогресса оставил, хоть блок и скрыт, чтобы не ломать JS */
         .progress-container {
             flex-grow: 1;
             height: 10px;
@@ -125,25 +126,51 @@
             transition: border-color 0.3s ease;
         }
 
+        /* ========================================== */
+        /* ОБНОВЛЕННАЯ СЕТКА (GRID FIX)              */
+        /* ========================================== */
+        
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            /* По умолчанию (на мобильном) строго 1 колонка. */
+            /* minmax(0, 1fr) гарантирует, что контент не растянет сетку */
+            grid-template-columns: minmax(0, 1fr); 
             gap: 18px;
         }
-        
+
+        /* На экранах пошире (планшеты) делаем 2 колонки */
+        @media (min-width: 600px) {
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Специально для блока инженерии (внутри details) */
         details .form-grid {
+            /* На десктопе (большие экраны) форсируем 3 колонки */
             @media (min-width: 768px) {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
 
-        .form-field { display: flex; flex-direction: column; gap: 6px; }
+        .form-field { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 6px; 
+            /* Защита от переполнения для самого поля */
+            min-width: 0; 
+            max-width: 100%;
+        }
+        
         .form-field--full { grid-column: 1 / -1; }
         
         label { font-weight: 500; font-size: 14px; color: var(--tg-theme-hint-color); }
         
         input, select, textarea {
             width: 100%;
+            /* Критически важно: max-width 100% не дает инпуту выйти за границы родителя */
+            max-width: 100%;
+            min-width: 0;
             padding: 12px 14px;
             border-radius: var(--border-radius-m);
             border: 1px solid var(--tg-theme-separator-color);
@@ -164,9 +191,9 @@
         
         textarea { min-height: 120px; resize: vertical; }
 
-        .input-group { display: flex; gap: 8px; }
-        .input-group input { flex: 1; }
-        .input-group select { flex-basis: 100px; }
+        .input-group { display: flex; gap: 8px; width: 100%; }
+        .input-group input { flex: 1; min-width: 0; } /* min-width: 0 важен для flex элементов */
+        .input-group select { flex-basis: 100px; flex-shrink: 0; }
 
         details.card { padding: 0; overflow: hidden; }
         summary {
@@ -219,12 +246,14 @@
             body { padding: 8px; }
             .card { padding: 16px; }
             .progress-wrapper { top: 4px; }
+            
+            /* Дополнительная страховка для мобильных */
+            details .details-content { padding: 0 16px 16px 16px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Этот блок теперь будет скрыт через CSS -->
         <div class="progress-wrapper">
             <div class="progress-container">
                 <div class="progress-bar" id="form-progress-bar"></div>
@@ -304,8 +333,7 @@
             const mainButton = tg ? tg.MainButton : null;
             const submitFallback = document.getElementById('submit-fallback');
             
-            // Эти элементы останутся в коде, но так как их родитель скрыт,
-            // их изменение не будет видно и не вызовет ошибок.
+            // Эти элементы нужны для JS логики, хотя визуально скрыты CSS-ом
             const progressBar = document.getElementById('form-progress-bar');
             const progressText = document.getElementById('progress-text');
             const requiredFields = Array.from(form.querySelectorAll('[required]'));
@@ -361,8 +389,6 @@
             }
 
             function updateProgressAndButton() {
-                // Эта часть кода будет продолжать работать в фоне, 
-                // но её результат не будет виден пользователю.
                 if (progressBar && progressText) {
                     const filledRequiredFields = requiredFields.filter(field => field.value.trim() !== '').length;
                     const progressPercentage = totalRequiredFields > 0 ? (filledRequiredFields / totalRequiredFields) * 100 : 0;
