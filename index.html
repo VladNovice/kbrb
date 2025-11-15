@@ -17,7 +17,8 @@
             --input-bg-color: #f9f9f9;
             --border-radius-l: 12px;
             --border-radius-m: 8px;
-            --primary-green: #00A950;
+            /* !!! ЦВЕТ КНОПКИ ИЗМЕНЕН С ЗЕЛЕНОГО НА СИНИЙ !!! */
+            --primary-blue: #007aff;
         }
 
         [data-theme="dark"] {
@@ -29,6 +30,7 @@
             --tg-theme-separator-color: #313d4c;
             --accent-color: #52a5e7;
             --input-bg-color: #1c2734;
+            --primary-blue: #52a5e7;
         }
 
         html {
@@ -49,12 +51,33 @@
 
         .container { max-width: 800px; margin: 0 auto; }
 
+        /* !!! СТИЛИ ДЛЯ ШКАЛЫ ПРОГРЕССА !!! */
+        .progress-container {
+            position: sticky;
+            top: 10px;
+            z-index: 10;
+            height: 8px;
+            background-color: var(--input-bg-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            border: 1px solid var(--tg-theme-separator-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: var(--primary-blue);
+            transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        /* !!! КОНЕЦ СТИЛЕЙ ДЛЯ ШКАЛЫ ПРОГРЕССА !!! */
+
         header {
             display: flex;
             gap: 16px;
             align-items: center;
             margin-bottom: 24px;
-            padding-top: 20px; /* Увеличенный отступ сверху */
+            padding-top: 10px; /* Уменьшен отступ, т.к. есть шкала */
         }
         header img {
             width: 56px;
@@ -77,7 +100,7 @@
             background-color: var(--tg-theme-section-bg-color);
             border-radius: var(--border-radius-l);
             padding: 20px;
-            margin-bottom: 24px; /* Увеличенный отступ между блоками */
+            margin-bottom: 16px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.04);
         }
         .card h2 {
@@ -91,7 +114,7 @@
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 22px; /* Увеличенный отступ между полями */
+            gap: 18px;
         }
         .form-field {
             display: flex;
@@ -106,7 +129,6 @@
             font-weight: 500;
             font-size: 14px;
             color: var(--tg-theme-hint-color);
-            transition: color 0.2s ease;
         }
         
         input, select, textarea {
@@ -119,15 +141,14 @@
             font-size: 16px;
             font-family: inherit;
             outline: none;
-            transition: all 0.2s ease-out;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
         input:focus, select:focus, textarea:focus {
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 20%, transparent);
-            transform: scale(1.02);
+            box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-color) 20%, transparent);
         }
-        .form-field:focus-within label {
-            color: var(--accent-color);
+        input::placeholder, textarea::placeholder {
+            color: color-mix(in srgb, var(--tg-theme-hint-color) 60%, transparent);
         }
         
         textarea { min-height: 120px; resize: vertical; }
@@ -153,7 +174,6 @@
             align-items: center;
             transition: background-color 0.2s ease;
         }
-        summary h2 { border: none; padding: 0; margin: 0; }
         summary:hover { background-color: var(--input-bg-color); }
         summary::-webkit-details-marker { display: none; }
         summary::after {
@@ -161,11 +181,10 @@
             font-size: 12px;
             color: var(--tg-theme-hint-color);
             transform: scaleY(0.8);
-            transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            transition: transform 0.2s ease;
         }
         details[open] > summary::after { transform: scaleY(0.8) rotate(180deg); }
-        details .details-content { padding: 0 20px 20px 20px; border-top: 1px solid var(--tg-theme-separator-color); }
-        details[open] .details-content { animation: slideDown 0.3s ease-out; }
+        details .details-content { padding: 0 20px 20px 20px; }
 
         #submit-fallback {
             display: none;
@@ -173,62 +192,30 @@
             padding: 14px;
             border: none;
             border-radius: var(--border-radius-m);
-            background: var(--primary-green);
+            /* !!! ЦВЕТ КНОПКИ ИЗМЕНЕН НА СИНИЙ !!! */
+            background: var(--primary-blue);
             color: #fff;
             font-weight: 600;
             font-size: 16px;
             cursor: pointer;
             width: 100%;
-            transition: transform 0.15s ease, filter 0.15s ease;
         }
-        #submit-fallback:hover { transform: scale(1.03); filter: brightness(1.1); }
-        #submit-fallback:active { transform: scale(0.98); filter: brightness(0.95); }
         #submit-fallback:disabled { opacity: 0.6; cursor: not-allowed; }
-        
-        .progress-container {
-            background-color: var(--input-bg-color);
-            border-radius: var(--border-radius-m);
-            padding: 4px;
-            margin-bottom: 20px;
-            position: sticky;
-            top: 10px;
-            z-index: 10;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            display: flex;
-            align-items: center;
-        }
-        .progress-bar {
-            height: 12px;
-            width: 0%;
-            background-color: var(--primary-green);
-            border-radius: var(--border-radius-m);
-            transition: width 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-        }
-        .progress-text {
-            position: absolute;
-            width: 100%;
-            text-align: center;
-            font-size: 10px;
-            font-weight: 700;
-            color: white;
-            text-shadow: 0 1px 1px rgba(0,0,0,0.2);
-        }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 1000px; } }
-
-        body { animation: fadeIn 0.5s ease-out forwards; }
-        header, .progress-container, .card {
-            animation: slideUp 0.6s ease-out forwards;
-            opacity: 0;
+        @media (max-width: 600px) {
+            body { padding: 8px; }
+            .card { padding: 16px; }
+            .progress-container { top: 4px; }
         }
-        .progress-container { animation-delay: 0.05s; }
-        .card { animation-delay: 0.1s; }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- !!! HTML-ЭЛЕМЕНТ ДЛЯ ШКАЛЫ ПРОГРЕССА !!! -->
+        <div class="progress-container">
+            <div class="progress-bar" id="form-progress-bar"></div>
+        </div>
+
         <header>
             <img src="krrbblack.png" alt="Герб Башкортостана"/>
             <div>
@@ -237,56 +224,46 @@
             </div>
         </header>
 
-        <div class="progress-container">
-            <div class="progress-bar" id="form-progress-bar"></div>
-            <div class="progress-text" id="form-progress-text">Заполнено 0%</div>
-        </div>
-
         <form id="invest-form" autocomplete="on" novalidate>
             <section class="card">
                 <h2>1. Базовые сведения</h2>
                 <div class="form-grid">
                     <div class="form-field"><label for="project_name">Название проекта *</label><input id="project_name" name="project_name" type="text" required placeholder="Эко-отель 'Шихан'"/></div>
                     <div class="form-field"><label for="initiator">Инициатор (компания) *</label><input id="initiator" name="initiator" type="text" required placeholder="ООО 'БашТуризм'"/></div>
-                    <div class="form-field form-field--full"><label for="contacts">Контактная информация *</label><textarea id="contacts" name="contacts" required placeholder="ФИО, должность, телефон, email"></textarea><p class="small">Эта информация нужна для обратной связи. Она не будет передана третьим лицам.</p></div>
+                    <div class="form-field form-field--full"><label for="contacts">Контактная информация *</label><textarea id="contacts" name="contacts" required placeholder="ФИО, должность, телефон, email"></textarea></div>
                     <div class="form-field form-field--full"><label for="description">Краткое описание проекта</label><textarea id="description" name="description" placeholder="Что будет производиться / какие услуги предоставляться"></textarea></div>
                     <div class="form-field"><label for="stage">Стадия проекта</label><select id="stage" name="stage"><option value="">— Выберите —</option><option value="прединвестиционная">Прединвестиционная (идея/ ТЭО)</option><option value="инвестиционная">Инвестиционная (строительство)</option><option value="эксплуатация">Эксплуатация</option></select></div>
                 </div>
             </section>
 
-            <details class="card" open>
-                <summary><h2>2. Финансы и показатели</h2></summary>
-                <div class="details-content">
-                    <div class="form-grid">
-                        <div class="form-field">
-                            <label for="investment_sum">Объем вложений *</label>
-                            <div class="input-group">
-                                <input id="investment_sum" name="investment_sum" type="number" min="0" step="0.1" required placeholder="150.5"/>
-                                <select id="investment_unit" name="investment_unit" aria-label="Единицы"><option value="mln" selected>млн ₽</option><option value="rub">₽</option></select>
-                            </div>
-                            <p class="small">Укажите общую сумму инвестиций. Если сумма больше 100 000, единицы можно оставить в рублях.</p>
+            <section class="card">
+                <h2>2. Финансы и показатели</h2>
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="investment_sum">Объем вложений *</label>
+                        <div class="input-group">
+                            <input id="investment_sum" name="investment_sum" type="number" min="0" step="0.1" required placeholder="150.5"/>
+                            <select id="investment_unit" name="investment_unit" aria-label="Единицы"><option value="mln" selected>млн ₽</option><option value="rub">₽</option></select>
                         </div>
-                        <div class="form-field"><label for="jobs_created">Создаваемые рабочие места *</label><input id="jobs_created" name="jobs_created" type="number" min="0" step="1" required placeholder="25"/></div>
-                        <div class="form-field"><label for="funding_own">Собственные средства, млн ₽</label><input id="funding_own" name="funding_own" type="number" min="0" step="0.1"/></div>
-                        <div class="form-field"><label for="funding_borrowed">Заемные средства, млн ₽</label><input id="funding_borrowed" name="funding_borrowed" type="number" min="0" step="0.1"/></div>
                     </div>
+                    <div class="form-field"><label for="jobs_created">Создаваемые рабочие места *</label><input id="jobs_created" name="jobs_created" type="number" min="0" step="1" required placeholder="25"/></div>
+                    <div class="form-field"><label for="funding_own">Собственные средства, млн ₽</label><input id="funding_own" name="funding_own" type="number" min="0" step="0.1"/></div>
+                    <div class="form-field"><label for="funding_borrowed">Заемные средства, млн ₽</label><input id="funding_borrowed" name="funding_borrowed" type="number" min="0" step="0.1"/></div>
                 </div>
-            </details>
+            </section>
+
+            <section class="card">
+                <h2>3. Локация и площадка</h2>
+                <div class="form-grid">
+                    <div class="form-field"><label for="location">Желаемое местоположение</label><input id="location" name="location" type="text" placeholder="г. Уфа, Белебей, Кумертау..."/></div>
+                    <div class="form-field"><label for="land_area_m2">Площадь участка (м²)</label><input id="land_area_m2" name="land_area_m2" type="number" min="0" step="1"/></div>
+                    <div class="form-field"><label for="site_form">Форма получения площадки</label><select id="site_form" name="site_form"><option value="">— Выберите —</option><option value="покупка">Покупка</option><option value="аренда">Аренда</option></select></div>
+                    <div class="form-field"><label for="activity_type">Вид деятельности</label><select id="activity_type" name="activity_type"><option value="">— Выберите —</option><option value="пром. производство">Пром. производство</option><option value="пищевое производство">Пищевое производство</option><option value="с/х производство">Сельское хозяйство</option><option value="туризм">Туризм</option><option value="придорожный сервис">Придорожный сервис</option><option value="торговля">Торговля</option><option value="логистика">Логистика</option><option value="it">IT</option><option value="другое">Другое</option></select></div>
+                </div>
+            </section>
 
             <details class="card">
-                <summary><h2>3. Локация и площадка</h2></summary>
-                <div class="details-content">
-                    <div class="form-grid">
-                        <div class="form-field"><label for="location">Желаемое местоположение</label><input id="location" name="location" type="text" placeholder="г. Уфа, Белебей, Кумертау..."/></div>
-                        <div class="form-field"><label for="land_area_m2">Площадь участка (м²)</label><input id="land_area_m2" name="land_area_m2" type="number" min="0" step="1"/></div>
-                        <div class="form-field"><label for="site_form">Форма получения площадки</label><select id="site_form" name="site_form"><option value="">— Выберите —</option><option value="покупка">Покупка</option><option value="аренда">Аренда</option></select></div>
-                        <div class="form-field"><label for="activity_type">Вид деятельности</label><select id="activity_type" name="activity_type"><option value="">— Выберите —</option><option value="пром. производство">Пром. производство</option><option value="пищевое производство">Пищевое производство</option><option value="с/х производство">Сельское хозяйство</option><option value="туризм">Туризм</option><option value="придорожный сервис">Придорожный сервис</option><option value="торговля">Торговля</option><option value="логистика">Логистика</option><option value="it">IT</option><option value="другое">Другое</option></select></div>
-                    </div>
-                </div>
-            </details>
-
-            <details class="card">
-                <summary><h2>Продвинутые параметры (инженерия)</h2></summary>
+                <summary>Продвинутые параметры (инженерия)</summary>
                 <div class="details-content">
                     <div class="form-grid">
                         <div class="form-field"><label for="hazard_class">Класс опасности</label><select id="hazard_class" name="hazard_class"><option value="">— Не указывать —</option><option value="1">1 (мин)</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5 (макс)</option></select></div>
@@ -311,10 +288,10 @@
             const mainButton = tg ? tg.MainButton : null;
             const submitFallback = document.getElementById('submit-fallback');
             
+            // !!! ЭЛЕМЕНТЫ ДЛЯ ШКАЛЫ ПРОГРЕССА !!!
             const progressBar = document.getElementById('form-progress-bar');
-            const progressText = document.getElementById('form-progress-text');
             const requiredFields = Array.from(form.querySelectorAll('[required]'));
-            const totalRequired = requiredFields.length;
+            const totalRequiredFields = requiredFields.length;
 
             function applyTheme() {
                 const theme = tg && tg.colorScheme === 'dark' ? 'dark' : 'light';
@@ -340,7 +317,6 @@
                 if (mainButton) mainButton.setText('Сохранить изменения');
                 
                 try {
-                    // !!! RECUERDA REEMPLAZAR ESTA URL POR LA TUYA DE NGROK !!!
                     const dataUrl = `https://<TU-URL-DE-NGROK>.ngrok-free.app/get_project?project_id=${projectId}&init_data=${encodeURIComponent(tg.initData || '')}`;
                     
                     const response = await fetch(dataUrl);
@@ -362,32 +338,29 @@
                 if (mainButton) mainButton.setText('Отправить заявку');
             }
 
-            function formIsValid() { return form.checkValidity(); }
+            // !!! ЛОГИКА ШКАЛЫ ПРОГРЕССА И ВАЛИДАЦИИ !!!
+            function updateProgressAndButton() {
+                // Обновление шкалы прогресса
+                const filledRequiredFields = requiredFields.filter(field => field.value.trim() !== '').length;
+                const progressPercentage = totalRequiredFields > 0 ? (filledRequiredFields / totalRequiredFields) * 100 : 0;
+                progressBar.style.width = `${progressPercentage}%`;
 
-            function updateProgress() {
-                if (!totalRequired) return;
-                let filledRequired = 0;
-                requiredFields.forEach(field => {
-                    if (field.value.trim() !== '') {
-                        filledRequired++;
-                    }
-                });
-                const percentage = Math.round((filledRequired / totalRequired) * 100);
-                progressBar.style.width = percentage + '%';
-                progressText.textContent = `Заполнено ${percentage}%`;
-            }
-
-            function updateButtonState() {
-                const isValid = formIsValid();
+                // Обновление состояния кнопки
+                const isValid = form.checkValidity();
                 if (mainButton) {
                     if (isValid) mainButton.enable(); else mainButton.disable();
-                    mainButton.setParams({ color: '#00A950', text_color: '#ffffff' });
+                    // !!! ЦВЕТ КНОПКИ ИЗМЕНЕН НА СИНИЙ !!!
+                    mainButton.setParams({ color: '#007aff', text_color: '#ffffff' });
                     mainButton.show();
                 } else {
                     submitFallback.style.display = 'block';
                     submitFallback.disabled = !isValid;
                 }
             }
+
+            updateProgressAndButton();
+            form.addEventListener('input', updateProgressAndButton);
+            form.addEventListener('change', updateProgressAndButton);
 
             function collectFormData() {
                 const data = {};
@@ -396,15 +369,9 @@
             }
 
             async function sendDataViaBackend() {
-                if (!formIsValid()) return;
+                if (!form.checkValidity()) return;
 
-                if (tg && tg.HapticFeedback) {
-                    tg.HapticFeedback.impactOccurred('light');
-                }
-
-                // !!! RECUERDA REEMPLAZAR ESTA URL POR LA TUYA DE NGROK !!!
                 const BACKEND_URL = "https://<TU-URL-DE-NGROK>.ngrok-free.app/submit";
-
                 const formData = collectFormData();
                 if (projectId) {
                     formData.project_id = projectId;
@@ -436,14 +403,6 @@
                     if (mainButton) mainButton.hideProgress();
                 }
             }
-
-            form.addEventListener('input', () => {
-                updateButtonState();
-                updateProgress();
-            });
-            
-            updateButtonState();
-            updateProgress();
 
             if (mainButton) {
                 mainButton.onClick(sendDataViaBackend);
