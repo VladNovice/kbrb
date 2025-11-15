@@ -13,7 +13,6 @@
             --tg-theme-hint-color: #6d6d72;
             --tg-theme-link-color: #007aff;
             --tg-theme-separator-color: #e5e5e5;
-            /* !!! ПЕРЕМЕННАЯ ДЛЯ ЦВЕТА КНОПКИ TELEGRAM С ЗАПАСНЫМ ВАРИАНТОМ !!! */
             --tg-theme-button-color: #007aff;
             --input-bg-color: #f9f9f9;
             --border-radius-l: 12px;
@@ -27,7 +26,6 @@
             --tg-theme-hint-color: #99a2ad;
             --tg-theme-link-color: #52a5e7;
             --tg-theme-separator-color: #313d4c;
-            /* !!! ЗАПАСНОЙ ВАРИАНТ ДЛЯ ТЕМНОЙ ТЕМЫ !!! */
             --tg-theme-button-color: #52a5e7;
             --input-bg-color: #1c2734;
         }
@@ -50,32 +48,51 @@
 
         .container { max-width: 800px; margin: 0 auto; }
 
-        .progress-container {
+        /* !!! ИЗМЕНЕНИЯ ДЛЯ ОТОБРАЖЕНИЯ ПРОЦЕНТОВ !!! */
+        .progress-wrapper {
             position: sticky;
             top: 10px;
             z-index: 10;
-            height: 8px;
-            background-color: var(--input-bg-color);
-            border-radius: 4px;
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             margin-bottom: 16px;
+            /* Добавляем фон, чтобы текст не "проваливался" при прокрутке */
+            background-color: var(--tg-theme-bg-color);
+            padding: 4px 0;
+        }
+        .progress-container {
+            flex-grow: 1;
+            height: 10px;
+            background-color: var(--input-bg-color);
+            border-radius: 5px;
+            overflow: hidden;
             border: 1px solid var(--tg-theme-separator-color);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
         }
         .progress-bar {
             width: 0%;
             height: 100%;
-            /* !!! ЦВЕТ ШКАЛЫ ПРОГРЕССА ТЕПЕРЬ ЗАВИСИТ ОТ ЦВЕТА КНОПКИ !!! */
             background-color: var(--tg-theme-button-color);
             transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s ease;
         }
+        .progress-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--tg-theme-hint-color);
+            flex-shrink: 0;
+            width: 45px;
+            text-align: right;
+            transition: color 0.3s ease;
+        }
+        /* !!! КОНЕЦ ИЗМЕНЕНИЙ ДЛЯ ПРОЦЕНТОВ !!! */
 
         header {
             display: flex;
             gap: 16px;
             align-items: center;
             margin-bottom: 24px;
-            padding-top: 10px;
+            padding-top: 0; /* Убрали отступ, т.к. wrapper прогресса его создает */
         }
         header img {
             width: 56px;
@@ -141,7 +158,6 @@
             outline: none;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
-        /* !!! ЦВЕТ ФОКУСА ТЕПЕРЬ ЗАВИСИТ ОТ ЦВЕТА КНОПКИ !!! */
         input:focus, select:focus, textarea:focus {
             border-color: var(--tg-theme-button-color);
             box-shadow: 0 0 0 2px color-mix(in srgb, var(--tg-theme-button-color) 20%, transparent);
@@ -191,9 +207,8 @@
             padding: 14px;
             border: none;
             border-radius: var(--border-radius-m);
-            /* !!! ЦВЕТ КНОПКИ ТЕПЕРЬ ЗАВИСИТ ОТ ЦВЕТА КНОПКИ TELEGRAM !!! */
             background: var(--tg-theme-button-color);
-            color: #fff; /* Telegram сам подбирает цвет текста, но для fallback лучше оставить белый */
+            color: #fff;
             font-weight: 600;
             font-size: 16px;
             cursor: pointer;
@@ -205,14 +220,18 @@
         @media (max-width: 600px) {
             body { padding: 8px; }
             .card { padding: 16px; }
-            .progress-container { top: 4px; }
+            .progress-wrapper { top: 4px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="progress-container">
-            <div class="progress-bar" id="form-progress-bar"></div>
+        <!-- !!! ОБНОВЛЕННАЯ СТРУКТУРА ШКАЛЫ ПРОГРЕССА С ТЕКСТОМ !!! -->
+        <div class="progress-wrapper">
+            <div class="progress-container">
+                <div class="progress-bar" id="form-progress-bar"></div>
+            </div>
+            <span class="progress-text" id="progress-text">0%</span>
         </div>
 
         <header>
@@ -289,6 +308,8 @@
             const submitFallback = document.getElementById('submit-fallback');
             
             const progressBar = document.getElementById('form-progress-bar');
+            // !!! ПОЛУЧАЕМ ЭЛЕМЕНТ ДЛЯ ТЕКСТА ПРОЦЕНТОВ !!!
+            const progressText = document.getElementById('progress-text');
             const requiredFields = Array.from(form.querySelectorAll('[required]'));
             const totalRequiredFields = requiredFields.length;
 
@@ -299,7 +320,6 @@
                     tg.setHeaderColor('secondary_bg_color');
                     tg.setBackgroundColor(theme === 'dark' ? '#18222d' : '#f1f1f1');
                     
-                    // !!! УСТАНАВЛИВАЕМ CSS-ПЕРЕМЕННУЮ С ЦВЕТОМ КНОПКИ ИЗ ТЕМЫ TELEGRAM !!!
                     if (tg.themeParams && tg.themeParams.button_color) {
                         document.documentElement.style.setProperty('--tg-theme-button-color', tg.themeParams.button_color);
                     }
@@ -345,12 +365,15 @@
             function updateProgressAndButton() {
                 const filledRequiredFields = requiredFields.filter(field => field.value.trim() !== '').length;
                 const progressPercentage = totalRequiredFields > 0 ? (filledRequiredFields / totalRequiredFields) * 100 : 0;
+                
+                // Обновляем шкалу
                 progressBar.style.width = `${progressPercentage}%`;
+                // !!! ОБНОВЛЯЕМ ТЕКСТ С ПРОЦЕНТАМИ !!!
+                progressText.textContent = `${Math.round(progressPercentage)}%`;
 
                 const isValid = form.checkValidity();
                 if (mainButton) {
                     if (isValid) mainButton.enable(); else mainButton.disable();
-                    // !!! БОЛЬШЕ НЕ УСТАНАВЛИВАЕМ ЦВЕТ ЯВНО, TELEGRAM СДЕЛАЕТ ЭТО АВТОМАТИЧЕСКИ !!!
                     mainButton.show();
                 } else {
                     submitFallback.style.display = 'block';
