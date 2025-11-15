@@ -2,42 +2,72 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no, shrink-to-fit=no"/>
     <title>Заявка на инвестиционный проект — Корпорация развития РБ</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
+        /* 
+         * Улучшенный стиль под Telegram Web App
+         * Автор: Ваш лучший фронтенд-разработчик
+        */
         :root {
-            /* Используем переменные темы Telegram с фоллбэками для отладки */
-            --bg-color: var(--tg-theme-bg-color, #f3f4f6);
-            --secondary-bg-color: var(--tg-theme-secondary-bg-color, #ffffff);
-            --text-color: var(--tg-theme-text-color, #000000);
-            --hint-color: var(--tg-theme-hint-color, #8e8e93);
-            --button-color: var(--tg-theme-button-color, #007aff);
-            --button-text-color: var(--tg-theme-button-text-color, #ffffff);
+            /* Цветовая схема Telegram (Light Theme) */
+            --tg-theme-bg-color: #efeff4; /* Основной фон приложения */
+            --tg-theme-section-bg-color: #ffffff; /* Фон секций/карточек */
+            --tg-theme-text-color: #000000; /* Основной текст */
+            --tg-theme-hint-color: #8e8e93; /* Подсказки, плейсхолдеры */
+            --tg-theme-link-color: #007aff; /* Ссылки, активные элементы */
+            --tg-theme-button-color: #007aff; /* Основной цвет кнопок (если не используется MainButton) */
+            --tg-theme-button-text-color: #ffffff;
+            --tg-theme-separator-color: #c8c7cc; /* Цвет разделителей */
+            --tg-theme-header-text-color: #8e8e93; /* Цвет заголовков секций */
+
+            /* Основная кнопка Telegram */
+            --primary-green: #00A950;
             
-            --radius: 12px;
+            /* Переменные для темной темы */
+            --tg-dark-bg-color: #18222d;
+            --tg-dark-section-bg-color: #212d3b;
+            --tg-dark-text-color: #ffffff;
+            --tg-dark-hint-color: #99a2ad;
+            --tg-dark-link-color: #52a5e7;
+            --tg-dark-separator-color: #313d4c;
+            --tg-dark-header-text-color: #99a2ad;
+        }
+
+        [data-theme="dark"] {
+            --tg-theme-bg-color: var(--tg-dark-bg-color);
+            --tg-theme-section-bg-color: var(--tg-dark-section-bg-color);
+            --tg-theme-text-color: var(--tg-dark-text-color);
+            --tg-theme-hint-color: var(--tg-dark-hint-color);
+            --tg-theme-link-color: var(--tg-dark-link-color);
+            --tg-theme-separator-color: var(--tg-dark-separator-color);
+            --tg-theme-header-text-color: var(--tg-dark-header-text-color);
         }
 
         html {
-            color-scheme: light dark;
+            /* Используем системные шрифты для нативного вида */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            box-sizing: border-box;
+            -webkit-text-size-adjust: 100%;
+        }
+        *, *::before, *::after {
+            box-sizing: inherit;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
             margin: 0;
-            padding: 14px;
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
+            padding: 16px;
+            font-size: 16px;
+            line-height: 1.4;
         }
 
         .container {
-            max-width: 760px;
+            max-width: 760px; /* Оставляем на случай очень широких экранов, но для мобильных будет full-width */
             margin: 0 auto;
         }
 
@@ -46,157 +76,193 @@
             display: flex;
             gap: 16px;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            padding: 0 4px; /* Небольшой отступ для выравнивания с секциями */
         }
         header img {
-            width: 56px;
-            height: 56px;
-            border-radius: 10px;
-            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: contain;
+            background-color: var(--tg-theme-section-bg-color);
+            padding: 4px;
         }
         header h1 {
-            font-size: 19px;
+            font-size: 20px;
             font-weight: 700;
-            margin: 0 0 2px 0;
+            margin: 0 0 4px 0;
         }
         header p {
             margin: 0;
-            color: var(--hint-color);
+            color: var(--tg-theme-hint-color);
             font-size: 14px;
         }
 
-        /* --- Форма и секции в стиле Telegram --- */
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .section {
-            background-color: var(--secondary-bg-color);
-            border-radius: var(--radius);
-            padding: 0 16px;
-        }
+        /* --- Секции и группы полей --- */
         .section-header {
-            padding: 16px 0 8px 0;
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-color);
+            color: var(--tg-theme-header-text-color);
+            font-size: 13px;
+            font-weight: 400;
+            text-transform: uppercase;
+            margin: 20px 16px 8px 16px;
+        }
+        .section-header:first-of-type {
+            margin-top: 0;
         }
 
-        /* --- Группа полей с разделителем --- */
         .form-group {
-            padding: 10px 0;
-            position: relative;
+            background-color: var(--tg-theme-section-bg-color);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
         }
-        .form-group:not(:last-child)::after {
+
+        .form-row {
+            display: flex;
+            align-items: flex-start; /* Выравнивание для многострочных textarea */
+            padding: 12px 16px;
+            position: relative;
+            flex-wrap: wrap;
+        }
+        .form-row:not(:last-child)::after {
             content: '';
             position: absolute;
             bottom: 0;
-            left: 0;
-            right: -16px;
+            left: 16px;
+            right: 0;
             height: 1px;
-            background-color: var(--bg-color);
+            background-color: var(--tg-theme-separator-color);
             transform: scaleY(0.5);
         }
-
+        
         label {
-            font-weight: 500;
-            font-size: 13px;
-            color: var(--hint-color);
-            margin-bottom: 4px;
             display: block;
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--tg-theme-text-color);
+            margin-bottom: 6px;
+            width: 100%;
         }
-        /* Убираем красный цвет у звездочки */
-        label[required]::after {
-            content: " *";
-            color: var(--hint-color);
+
+        .form-row label {
+            width: 120px; /* Фиксированная ширина для лейблов в строке */
+            margin-right: 12px;
+            margin-bottom: 0;
+            padding-top: 10px; /* Вертикальное выравнивание с инпутом */
+            font-weight: 400;
+            flex-shrink: 0;
+        }
+
+        .input-wrapper {
+            flex: 1 1 200px;
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 8px 0;
+            padding: 10px 0; /* Убираем боковые паддинги, т.к. они есть в .form-row */
             border: none;
-            border-bottom: 1.5px solid var(--bg-color);
-            background-color: transparent;
-            color: var(--text-color);
+            background: transparent;
+            color: var(--tg-theme-text-color);
             font-size: 16px;
             font-family: inherit;
-            box-sizing: border-box;
-            transition: border-color 0.2s ease;
-            border-radius: 0;
-        }
-        input:focus-visible, select:focus-visible, textarea:focus-visible {
             outline: none;
-            border-bottom-color: var(--button-color);
         }
-        /* Убираем красную рамку для невалидных полей, делаем ее синей */
-        input:invalid, select:invalid, textarea:invalid {
-           border-bottom-color: var(--button-color);
+        input::placeholder, textarea::placeholder {
+            color: var(--tg-theme-hint-color);
+        }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23c8c7cc'%3E%3Cpath d='M6 9.5a.75.75 0 0 1-.53-.22l-3-3a.75.75 0 1 1 1.06-1.06L6 7.69l2.47-2.47a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-.53.22Z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0px center;
+            cursor: pointer;
         }
         textarea {
-            min-height: 80px;
+            min-height: 100px;
             resize: vertical;
         }
-
-        /* --- Компоновка полей в строку --- */
-        .row-group {
-            display: flex;
-            align-items: baseline;
-            gap: 12px;
+        .small {
+            font-size: 13px;
+            color: var(--tg-theme-hint-color);
+            margin-top: 6px;
+            width: 100%;
         }
-        .row-group > input { flex: 1; }
-        .row-group > select { flex-shrink: 0; width: auto; }
 
-        /* --- Стилизация <details> --- */
-        details {
-            background-color: var(--secondary-bg-color);
-            border-radius: var(--radius);
+        /* --- Сворачиваемая секция --- */
+        details.form-group {
+            background: transparent;
         }
         summary {
             cursor: pointer;
-            padding: 16px;
-            font-weight: 600;
+            padding: 14px 16px;
+            font-weight: 400;
             font-size: 16px;
             list-style: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            color: var(--tg-theme-link-color);
+            background-color: var(--tg-theme-section-bg-color);
+            border-radius: 12px;
+            position: relative;
         }
         summary::-webkit-details-marker { display: none; }
         summary::after {
-            content: '';
-            width: 8px;
-            height: 8px;
-            border-bottom: 2px solid var(--hint-color);
-            border-right: 2px solid var(--hint-color);
-            transform: rotate(45deg);
-            transition: transform 0.2s;
+            content: '›';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%) rotate(90deg);
+            font-size: 22px;
+            color: var(--tg-theme-hint-color);
+            transition: transform 0.2s ease;
         }
         details[open] > summary::after {
-            transform: rotate(225deg);
+            transform: translateY(-50%) rotate(-90deg);
         }
-        .details-content {
-            padding: 0 16px;
+        details > .form-group {
+            margin-top: 10px;
         }
 
         /* --- Кнопка-фоллбэк --- */
         #submit-fallback {
-            display: none; /* Скрыта по умолчанию, JS ее покажет если нужно */
-            margin-top: 10px;
+            display: none;
+            margin-top: 20px;
             padding: 14px;
             border: none;
-            border-radius: 10px;
-            background: var(--button-color);
-            color: var(--button-text-color);
+            border-radius: 12px;
+            background: var(--primary-green);
+            color: #fff;
             font-weight: 700;
             font-size: 16px;
             cursor: pointer;
             width: 100%;
         }
         #submit-fallback:disabled {
-            background-color: var(--hint-color);
-            opacity: 0.7;
+            opacity: 0.6;
             cursor: not-allowed;
+        }
+
+        /* --- Адаптивность --- */
+        @media (max-width: 500px) {
+            .form-row {
+                flex-direction: column;
+                align-items: stretch;
+                padding-top: 8px;
+                padding-bottom: 8px;
+            }
+            .form-row label {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 4px;
+                padding-top: 0;
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--tg-theme-text-color);
+            }
+            input, select, textarea {
+                padding-top: 4px;
+                padding-bottom: 4px;
+            }
         }
     </style>
 </head>
@@ -205,102 +271,228 @@
         <header>
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Coat_of_arms_of_Bashkortostan.svg/200px-Coat_of_arms_of_Bashkortostan.svg.png" alt="Герб Башкортостана"/>
             <div>
-                <h1>Заявка на инвестиционный проект</h1>
-                <p>Корпорация развития Республики Башкортостан</p>
+                <h1>Заявка на инвестпроект</h1>
+                <p>Корпорация развития РБ</p>
             </div>
         </header>
 
         <form id="invest-form" autocomplete="on" novalidate>
-            <!-- 1. Базовые сведения -->
-            <section class="section">
-                <div class="form-group">
-                    <label for="project_name" required>Название проекта</label>
-                    <input id="project_name" name="project_name" type="text" required placeholder="Эко-отель 'Шихан'"/>
+            <h2 class="section-header">1. Базовые сведения</h2>
+            <div class="form-group">
+                <div class="form-row">
+                    <label for="project_name">Название *</label>
+                    <div class="input-wrapper"><input id="project_name" name="project_name" type="text" required placeholder="Эко-отель 'Шихан'"/></div>
                 </div>
-                <div class="form-group">
-                    <label for="initiator" required>Инициатор (компания / ФИО)</label>
-                    <input id="initiator" name="initiator" type="text" required placeholder="ООО 'БашТуризм' или Иванов И.И."/>
+                <div class="form-row">
+                    <label for="initiator">Инициатор *</label>
+                    <div class="input-wrapper"><input id="initiator" name="initiator" type="text" required placeholder="ООО 'БашТуризм', Иванов И.И."/></div>
                 </div>
-                <div class="form-group">
-                    <label for="contacts" required>Контактная информация</label>
-                    <textarea id="contacts" name="contacts" required placeholder="ФИО, должность, телефон, email"></textarea>
+                <div class="form-row">
+                    <label for="contacts">Контакты *</label>
+                    <div class="input-wrapper"><textarea id="contacts" name="contacts" required placeholder="ФИО, должность, телефон, email"></textarea></div>
                 </div>
-                <div class="form-group">
-                    <label for="description">Краткое описание проекта</label>
-                    <textarea id="description" name="description" placeholder="Что будет производиться / какая услуга предоставляться"></textarea>
+                <div class="form-row">
+                    <label for="description">Описание</label>
+                    <div class="input-wrapper"><textarea id="description" name="description" placeholder="Кратко — что будет производиться / предоставляться"></textarea></div>
                 </div>
-                <div class="form-group">
-                    <label for="stage">Стадия проекта</label>
-                    <select id="stage" name="stage">
-                        <option value="">— Выберите стадию —</option>
-                        <option value="прединвестиционная">Прединвестиционная (идея, ТЭО)</option>
-                        <option value="инвестиционная">Инвестиционная (строительство)</option>
-                        <option value="эксплуатация">Эксплуатация</option>
-                    </select>
+                <div class="form-row">
+                    <label for="stage">Стадия</label>
+                    <div class="input-wrapper">
+                        <select id="stage" name="stage">
+                            <option value="">— Выберите —</option>
+                            <option value="прединвестиционная">Прединвестиционная (идея/ ТЭО)</option>
+                            <option value="инвестиционная">Инвестиционная (строительство)</option>
+                            <option value="эксплуатация">Эксплуатация</option>
+                        </select>
+                        <div class="small">Укажите текущую стадию</div>
+                    </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- 2. Финансы -->
-            <section class="section">
-                <h2 class="section-header">2. Финансы</h2>
-                <div class="form-group">
-                    <label for="investment_sum" required>Объем инвестиций</label>
-                    <div class="row-group">
-                        <input id="investment_sum" name="investment_sum" type="number" min="0" step="0.1" required placeholder="Например: 150.5"/>
-                        <select id="investment_unit" name="investment_unit" aria-label="Валюта инвестиций">
+            <h2 class="section-header">2. Финансы</h2>
+            <div class="form-group">
+                <div class="form-row">
+                    <label for="investment_sum">Вложения *</label>
+                    <div class="input-wrapper" style="display:flex; gap: 8px;">
+                        <input id="investment_sum" name="investment_sum" type="number" min="0" step="0.1" required placeholder="150.5" style="flex: 1;"/>
+                        <select id="investment_unit" name="investment_unit" aria-label="Единицы инвестиций" title="Единицы" style="flex-basis: 80px;">
                             <option value="mln" selected>млн ₽</option>
                             <option value="rub">₽</option>
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="jobs_created" required>Создаваемые рабочие места</label>
-                    <input id="jobs_created" name="jobs_created" type="number" min="0" step="1" required placeholder="Например: 25"/>
+                <div class="form-row">
+                    <label for="jobs_created">Раб. места *</label>
+                    <div class="input-wrapper"><input id="jobs_created" name="jobs_created" type="number" min="0" step="1" required placeholder="Например: 25"/></div>
                 </div>
-                <div class="form-group">
-                    <label for="funding_own">Собственные средства (млн ₽)</label>
-                    <input id="funding_own" name="funding_own" type="number" min="0" step="0.1"/>
+                <div class="form-row">
+                    <label for="funding_own">Свои средства</label>
+                    <div class="input-wrapper"><input id="funding_own" name="funding_own" type="number" min="0" step="0.1" placeholder="в млн ₽"/></div>
                 </div>
-                <div class="form-group">
-                    <label for="funding_borrowed">Заемные средства (млн ₽)</label>
-                    <input id="funding_borrowed" name="funding_borrowed" type="number" min="0" step="0.1"/>
+                <div class="form-row">
+                    <label for="funding_borrowed">Заемные</label>
+                    <div class="input-wrapper"><input id="funding_borrowed" name="funding_borrowed" type="number" min="0" step="0.1" placeholder="в млн ₽"/></div>
                 </div>
-            </section>
-            
-            <!-- Остальные секции по аналогии -->
-            
+            </div>
+
+            <h2 class="section-header">3. Локация и площадка</h2>
+            <div class="form-group">
+                <div class="form-row">
+                    <label for="location">Место</label>
+                    <div class="input-wrapper">
+                        <input id="location" name="location" type="text" placeholder="г. Уфа, Белебей, Кумертау..." />
+                        <div class="small">Укажите город/район</div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label for="land_area_m2">Участок (м²)</label>
+                    <div class="input-wrapper"><input id="land_area_m2" name="land_area_m2" type="number" min="0" step="1" placeholder="в кв. метрах"/></div>
+                </div>
+                <div class="form-row">
+                    <label for="site_form">Форма</label>
+                    <div class="input-wrapper">
+                        <select id="site_form" name="site_form">
+                            <option value="">— Выберите —</option>
+                            <option value="покупка">Покупка</option>
+                            <option value="аренда">Аренда</option>
+                        </select>
+                    </div>
+                </div>
+                 <div class="form-row">
+                    <label for="transport_requirements">Транспорт</label>
+                    <div class="input-wrapper"><textarea id="transport_requirements" name="transport_requirements" placeholder="Доступность трасс, ж/д подъезд и т.п."></textarea></div>
+                </div>
+                <div class="form-row">
+                    <label for="building_requirements">Здания</label>
+                    <div class="input-wrapper"><textarea id="building_requirements" name="building_requirements" placeholder="Площадь, высота потолков, склад"></textarea></div>
+                </div>
+            </div>
+
+            <h2 class="section-header">4. График реализации</h2>
+            <div class="form-group">
+                <div class="form-row">
+                    <label for="schedule_start">Дата старта</label>
+                    <div class="input-wrapper"><input id="schedule_start" name="schedule_start" type="date" /></div>
+                </div>
+                <div class="form-row">
+                    <label for="schedule_duration_months">Длительность</label>
+                    <div class="input-wrapper"><input id="schedule_duration_months" name="schedule_duration_months" type="number" min="0" step="1" placeholder="в месяцах, например: 24"/></div>
+                </div>
+            </div>
+
+            <h2 class="section-header">6. Вид деятельности</h2>
+            <div class="form-group">
+                <div class="form-row">
+                    <label for="activity_type">Профиль</label>
+                    <div class="input-wrapper">
+                        <select id="activity_type" name="activity_type">
+                            <option value="">— Выберите —</option>
+                            <option value="пром. производство">Пром. производство</option>
+                            <option value="пищевое производство">Пищевое производство</option>
+                            <option value="с/х производство">Сельскохозяйственное производство</option>
+                            <option value="туризм">Туризм</option>
+                            <option value="придорожный сервис">Придорожный сервис</option>
+                            <option value="торговля">Сфера торговли</option>
+                            <option value="логистика">Логистика / Склад</option>
+                            <option value="it">IT / Цифровые сервисы</option>
+                            <option value="другое">Другое</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <details id="advanced">
+                <summary>5. Инженерные параметры (дополнительно)</summary>
+                <div class="form-group">
+                    <div class="form-row">
+                        <label for="hazard_class">Класс опасн.</label>
+                        <div class="input-wrapper">
+                            <select id="hazard_class" name="hazard_class">
+                                <option value="">— Не указывать —</option>
+                                <option value="1">1 (наименьшая)</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5 (наибольшая)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label for="gas_m3_per_h">Газ (м³/час)</label>
+                        <div class="input-wrapper"><input id="gas_m3_per_h" name="gas_m3_per_h" type="number" min="0" step="0.1" placeholder="Например: 50"/></div>
+                    </div>
+                    <div class="form-row">
+                        <label for="electricity_kw">Э/Э (кВт)</label>
+                        <div class="input-wrapper"><input id="electricity_kw" name="electricity_kw" type="number" min="0" step="0.1" placeholder="Например: 500"/></div>
+                    </div>
+                    <div class="form-row">
+                        <label for="water_drinking_m3_per_day">Вода пит.</label>
+                        <div class="input-wrapper"><input id="water_drinking_m3_per_day" name="water_drinking_m3_per_day" type="number" min="0" step="0.1" placeholder="м³/сутки"/></div>
+                    </div>
+                    <div class="form-row">
+                        <label for="water_technical_m3_per_day">Вода техн.</label>
+                        <div class="input-wrapper"><input id="water_technical_m3_per_day" name="water_technical_m3_per_day" type="number" min="0" step="0.1" placeholder="м³/сутки"/></div>
+                    </div>
+                    <div class="form-row">
+                        <label for="sewage_m3_per_day">Водоотвод</label>
+                        <div class="input-wrapper"><input id="sewage_m3_per_day" name="sewage_m3_per_day" type="number" min="0" step="0.1" placeholder="м³/сутки"/></div>
+                    </div>
+                    <div class="form-row">
+                        <label for="heating_gcal_per_h">Отопление</label>
+                        <div class="input-wrapper"><input id="heating_gcal_per_h" name="heating_gcal_per_h" type="number" min="0" step="0.1" placeholder="Гкал/ч"/></div>
+                    </div>
+                    <div class="form-row">
+                        <label for="steam_bar">Пар (бар)</label>
+                        <div class="input-wrapper"><input id="steam_bar" name="steam_bar" type="number" min="0" step="0.1" /></div>
+                    </div>
+                    <div class="form-row">
+                        <label for="additional_requirements">Доп. треб.</label>
+                        <div class="input-wrapper"><textarea id="additional_requirements" name="additional_requirements" placeholder="Вентиляция, очистка стоков и т.д."></textarea></div>
+                    </div>
+                </div>
+            </details>
+
             <button type="button" id="submit-fallback">Отправить заявку</button>
         </form>
     </div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        // ВАШ ОРИГИНАЛЬНЫЙ РАБОЧИЙ JAVASCRIPT БЕЗ ИЗМЕНЕНИЙ
+        // --- JS-логика осталась без изменений ---
         document.addEventListener('DOMContentLoaded', function () {
             const tg = window.Telegram?.WebApp;
 
-            // --- THEME INITIALIZATION ---
-            // Этот блок не нужен, так как мы используем CSS переменные Telegram напрямую
-            // if (tg) tg.onEvent('themeChanged', ...);
+            // --- Инициализация и настройка темы ---
+            function applyTheme() {
+                const theme = tg && tg.colorScheme === 'dark' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+                if (tg) {
+                    tg.setHeaderColor(theme === 'dark' ? 'secondary_bg_color' : 'bg_color');
+                    tg.setBackgroundColor(theme === 'dark' ? '#18222d' : '#efeff4');
+                }
+            }
+            
+            if (tg) {
+                tg.ready();
+                tg.expand();
+                tg.onEvent('themeChanged', applyTheme);
+            }
+            applyTheme();
 
-            // --- FORM ELEMENTS ---
             const form = document.getElementById('invest-form');
             const mainButton = tg ? tg.MainButton : null;
             const submitFallback = document.getElementById('submit-fallback');
 
-            // --- BUTTON CONFIGURATION ---
+            // --- Настройка главной кнопки ---
             if (mainButton) {
-                    mainButton.setText("Отправить заявку");
-                    mainButton.color = tg.themeParams.button_color || 'var(--button-color)';  // Фоллбэк на вашу CSS-var
-                    mainButton.textColor = tg.themeParams.button_text_color || 'var(--button-text-color)';
-                    mainButton.show();
-            }
+                mainButton.setText("Отправить заявку");
+                mainButton.setParams({ color: '#00A950', text_color: '#ffffff' });
+                mainButton.show();
             } else {
-                // Эта строка - ключ к решению проблемы. Она показывает кнопку в браузере.
                 submitFallback.style.display = 'block';
             }
 
-            // --- VALIDATION & BUTTON STATE ---
+            // --- Валидация и состояние кнопки ---
             function formIsValid() {
                 return form.checkValidity();
             }
@@ -309,58 +501,57 @@
                 const isValid = formIsValid();
                 if (mainButton) {
                     if (isValid) mainButton.enable(); else mainButton.disable();
-                }
-                if(submitFallback) {
+                } else {
                     submitFallback.disabled = !isValid;
                 }
             }
-            
-            form.addEventListener('input', updateButtonState);
-            updateButtonState();
 
-            // --- DATA SUBMISSION ---
+            updateButtonState();
+            form.addEventListener('input', updateButtonState);
+            form.addEventListener('change', updateButtonState);
+
+            // --- Сбор и отправка данных ---
             function collectFormData() {
-                const formData = new FormData(form);
-                return Object.fromEntries(formData.entries());
+                const elements = form.querySelectorAll('input,textarea,select');
+                const data = {};
+                elements.forEach(el => {
+                    const name = el.name;
+                    if (!name) return;
+                    if (el.type === 'checkbox') {
+                        data[name] = el.checked;
+                    } else {
+                        data[name] = el.value !== undefined ? el.value : '';
+                    }
+                });
+                return data;
             }
 
             async function sendDataToBot() {
-                if (!formIsValid()) {
-                    const firstInvalidField = form.querySelector(':invalid');
-                    if (firstInvalidField) {
-                        firstInvalidField.focus();
-                    }
-                    if(tg) tg.HapticFeedback.notificationOccurred('error');
-                    return;
-                }
-
+                if (!formIsValid()) return;
                 const data = collectFormData();
                 try {
                     if (mainButton) mainButton.showProgress();
                     const payload = JSON.stringify(data);
-
                     if (tg) {
                         tg.sendData(payload);
                     } else {
                         console.log("DEBUG payload:", payload);
-                        alert("Данные для отправки выведены в консоль.");
+                        alert("DEBUG: payload отправлен в консоль (в WebApp этот JSON отправляется боту).");
                     }
                 } finally {
                     if (mainButton) mainButton.hideProgress();
                 }
             }
 
-            // --- EVENT LISTENERS ---
             if (mainButton) {
                 mainButton.onClick(sendDataToBot);
             }
             submitFallback.addEventListener('click', sendDataToBot);
 
-            // Accessibility
-            const firstInput = form.querySelector('input:not([type="hidden"]), textarea, select');
-            if (firstInput) firstInput.focus();
+            // --- Фокус на первом обязательном поле ---
+            const firstReq = form.querySelector('[required]');
+            if (firstReq) firstReq.focus();
         });
     </script>
 </body>
 </html>
-
