@@ -240,115 +240,160 @@
 <body>
     <div class="container">
         <header>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Coat_of_arms_of_Bashkortostan.svg/200px-Coat_of_arms_of_Bashkortostan.svg.png" alt="Герб Башкортостана"/>
+            <img src="" alt="Герб Башкортостана"/>
             <div>
                 <h1>Заявка на инвестиционный проект</h1>
                 <p>Корпорация развития Республики Башкортостан</p>
             </div>
         </header>
 
-        <form id="invest-form" autocomplete="on" novalidate>
-            <!-- 1. Базовые сведения -->
-            <section class="section" aria-labelledby="basic-title">
-                <div class="form-group">
-                    <label for="project_name" required>Название проекта</label>
-                    <input id="project_name" name="project_name" type="text" required placeholder="Эко-отель 'Шихан'"/>
-                </div>
-                <div class="form-group">
-                    <label for="initiator" required>Инициатор (компания / ФИО)</label>
-                    <input id="initiator" name="initiator" type="text" required placeholder="ООО 'БашТуризм' или Иванов И.И."/>
-                </div>
-                <div class="form-group">
-                    <label for="contacts" required>Контактная информация</label>
-                    <textarea id="contacts" name="contacts" required placeholder="ФИО, должность, телефон, email"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="description">Краткое описание проекта</label>
-                    <textarea id="description" name="description" placeholder="Что будет производиться / какая услуга предоставляться"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="stage">Стадия проекта</label>
-                    <select id="stage" name="stage">
-                        <option value="">— Выберите стадию —</option>
-                        <option value="прединвестиционная">Прединвестиционная (идея, ТЭО)</option>
-                        <option value="инвестиционная">Инвестиционная (строительство, закупка)</option>
-                        <option value="эксплуатация">Действующий проект (эксплуатация)</option>
-                    </select>
-                </div>
-            </section>
-
-            <!-- 2. Финансы -->
-            <section class="section" aria-labelledby="finance-title">
-                 <h2 id="finance-title" class="section-header">2. Финансы</h2>
-                 <div class="form-group">
-                    <label for="investment_sum" required>Объем инвестиций</label>
-                    <div class="row-group">
-                        <input id="investment_sum" name="investment_sum" type="number" min="0" step="0.1" required placeholder="Например: 150.5"/>
-                        <select id="investment_unit" name="investment_unit" aria-label="Валюта инвестиций">
-                            <option value="mln" selected>млн ₽</option>
-                            <option value="rub">₽</option>
-                        </select>
-                    </div>
-                </div>
-                 <div class="form-group">
-                    <label for="jobs_created" required>Создаваемые рабочие места</label>
-                    <input id="jobs_created" name="jobs_created" type="number" min="0" step="1" required placeholder="Например: 25"/>
-                </div>
-                <div class="form-group">
-                    <label for="funding_own">Собственные средства (млн ₽)</label>
-                    <input id="funding_own" name="funding_own" type="number" min="0" step="0.1" />
-                </div>
-                <div class="form-group">
-                    <label for="funding_borrowed">Заемные средства (млн ₽)</label>
-                    <input id="funding_borrowed" name="funding_borrowed" type="number" min="0" step="0.1" />
-                </div>
-            </section>
-
-            <!-- ... Остальная HTML разметка остается почти без изменений, только классы .card -> .section и h2 -> h2.section-header ... -->
-            <!-- 3. Локация и площадка -->
-            <section class="section" aria-labelledby="location-title">
-                <h2 id="location-title" class="section-header">3. Локация и площадка</h2>
-                 <div class="form-group">
-                    <label for="location">Желаемое местоположение</label>
-                    <input id="location" name="location" type="text" placeholder="г. Уфа, Белебеевский район..." />
-                </div>
-                <div class="form-group">
-                    <label for="land_area_m2">Площадь участка (м²)</label>
-                    <input id="land_area_m2" name="land_area_m2" type="number" min="0" step="1"/>
-                </div>
-                <div class="form-group">
-                    <label for="site_form">Форма получения площадки</label>
-                    <select id="site_form" name="site_form">
-                        <option value="">— Выберите —</option>
-                        <option value="покупка">Покупка</option>
-                        <option value="аренда">Аренда</option>
-                    </select>
-                </div>
-            </section>
-
-            <!-- 5. Продвинутые / инженерные параметры -->
-            <details id="advanced">
-                <summary id="advanced-title">Инженерные параметры (опционально)</summary>
-                <div class="details-content">
-                    <div class="form-group">
-                        <label for="gas_m3_per_h">Газ (м³/час)</label>
-                        <input id="gas_m3_per_h" name="gas_m3_per_h" type="number" min="0" step="0.1" />
-                    </div>
-                    <div class="form-group">
-                        <label for="electricity_kw">Электроснабжение (кВт)</label>
-                        <input id="electricity_kw" name="electricity_kw" type="number" min="0" step="0.1" />
-                    </div>
-                    <div class="form-group">
-                        <label for="water_drinking_m3_per_day">Вода питьевая (м³/сутки)</label>
-                        <input id="water_drinking_m3_per_day" name="water_drinking_m3_per_day" type="number" min="0" step="0.1" />
-                    </div>
-                </div>
-            </details>
             
-            <!-- ... и так далее для всех секций ... -->
-            
-            <button type="button" id="submit-fallback">Отправить заявку</button>
-        </form>
+<form id="invest-form" autocomplete="on" novalidate>
+    <!-- 1. Базовые сведения -->
+    <section class="section" aria-labelledby="basic-title">
+        <div class="form-group">
+            <label for="project_name" required>Название проекта</label>
+            <input id="project_name" name="project_name" type="text" required placeholder="Эко-отель 'Шихан'"/>
+        </div>
+        <div class="form-group">
+            <label for="initiator" required>Инициатор (компания / ФИО)</label>
+            <input id="initiator" name="initiator" type="text" required placeholder="ООО 'БашТуризм' или Иванов И.И."/>
+        </div>
+        <div class="form-group">
+            <label for="contacts" required>Контактная информация</label>
+            <textarea id="contacts" name="contacts" required placeholder="ФИО, должность, телефон, email"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="description">Краткое описание проекта</label>
+            <textarea id="description" name="description" placeholder="Что будет производиться / какая услуга предоставляться"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="stage">Стадия проекта</label>
+            <select id="stage" name="stage">
+                <option value="">— Выберите стадию —</option>
+                <option value="прединвестиционная">Прединвестиционная (идея, ТЭО)</option>
+                <option value="инвестиционная">Инвестиционная (строительство, закупка)</option>
+                <option value="эксплуатация">Действующий проект (эксплуатация)</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- 2. Финансы -->
+    <section class="section" aria-labelledby="finance-title">
+         <h2 id="finance-title" class="section-header">2. Финансы</h2>
+         <div class="form-group">
+            <label for="investment_sum" required>Объем инвестиций</label>
+            <div class="row-group">
+                <input id="investment_sum" name="investment_sum" type="number" min="0" step="0.1" required placeholder="Например: 150.5"/>
+                <select id="investment_unit" name="investment_unit" aria-label="Валюта инвестиций">
+                    <option value="mln" selected>млн ₽</option>
+                    <option value="rub">₽</option>
+                </select>
+            </div>
+        </div>
+         <div class="form-group">
+            <label for="jobs_created" required>Создаваемые рабочие места</label>
+            <input id="jobs_created" name="jobs_created" type="number" min="0" step="1" required placeholder="Например: 25"/>
+        </div>
+        <div class="form-group">
+            <label for="funding_own">Собственные средства (млн ₽)</label>
+            <input id="funding_own" name="funding_own" type="number" min="0" step="0.1" />
+        </div>
+        <div class="form-group">
+            <label for="funding_borrowed">Заемные средства (млн ₽)</label>
+            <input id="funding_borrowed" name="funding_borrowed" type="number" min="0" step="0.1" />
+        </div>
+    </section>
+
+    <!-- 3. Локация и площадка -->
+    <section class="section" aria-labelledby="location-title">
+        <h2 id="location-title" class="section-header">3. Локация и площадка</h2>
+         <div class="form-group">
+            <label for="location">Желаемое местоположение</label>
+            <input id="location" name="location" type="text" placeholder="г. Уфа, Белебеевский район..." />
+        </div>
+        <div class="form-group">
+            <label for="land_area_m2">Площадь участка (м²)</label>
+            <input id="land_area_m2" name="land_area_m2" type="number" min="0" step="1"/>
+        </div>
+        <div class="form-group">
+            <label for="site_form">Форма получения площадки</label>
+            <select id="site_form" name="site_form">
+                <option value="">— Выберите —</option>
+                <option value="покупка">Покупка</option>
+                <option value="аренда">Аренда</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- 4. График проекта -->
+    <section class="section" aria-labelledby="schedule-title">
+        <h2 id="schedule-title" class="section-header">4. График реализации</h2>
+        <div class="form-group">
+            <label for="schedule_start">Планируемая дата старта</label>
+            <input id="schedule_start" name="schedule_start" type="date" />
+        </div>
+        <div class="form-group">
+            <label for="schedule_duration_months">Длительность (месяцев)</label>
+            <input id="schedule_duration_months" name="schedule_duration_months" type="number" min="0" step="1" placeholder="Например: 24"/>
+        </div>
+    </section>
+
+    <!-- 5. Продвинутые / инженерные параметры -->
+    <details id="advanced">
+        <summary id="advanced-title">Инженерные параметры (опционально)</summary>
+        <div class="details-content">
+            <div class="form-group">
+                <label for="hazard_class">Класс опасности</label>
+                <select id="hazard_class" name="hazard_class">
+                    <option value="">— Не указывать —</option>
+                    <option value="1">I класс (чрезвычайно опасные)</option>
+                    <option value="2">II класс (высокоопасные)</option>
+                    <option value="3">III класс (умеренно опасные)</option>
+                    <option value="4">IV класс (малоопасные)</option>
+                    <option value="5">V класс (практически неопасные)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="gas_m3_per_h">Газ (м³/час)</label>
+                <input id="gas_m3_per_h" name="gas_m3_per_h" type="number" min="0" step="0.1" />
+            </div>
+            <div class="form-group">
+                <label for="electricity_kw">Электроснабжение (кВт)</label>
+                <input id="electricity_kw" name="electricity_kw" type="number" min="0" step="0.1" />
+            </div>
+            <div class="form-group">
+                <label for="water_drinking_m3_per_day">Вода питьевая (м³/сутки)</label>
+                <input id="water_drinking_m3_per_day" name="water_drinking_m3_per_day" type="number" min="0" step="0.1" />
+            </div>
+        </div>
+    </details>
+
+    <!-- 6. Вид деятельности -->
+    <section class="section" aria-labelledby="activity-title">
+        <h2 id="activity-title" class="section-header">6. Вид деятельности</h2>
+        <div class="form-group">
+            <label for="activity_type">Выберите основной профиль проекта</label>
+            <select id="activity_type" name="activity_type">
+                <option value="">— Выберите из списка —</option>
+                <option value="пром. производство">Промышленное производство</option>
+                <option value="пищевое производство">Пищевое производство</option>
+                <option value="с/х производство">Сельскохозяйственное производство</option>
+                <option value="туризм">Туризм и рекреация</option>
+                <option value="придорожный сервис">Придорожный сервис</option>
+                <option value="торговля">Сфера торговли</option>
+                <option value="логистика">Логистика / Склад</option>
+                <option value="it">IT / Цифровые сервисы</option>
+                <option value="другое">Другое</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- ВОТ ЭТА КНОПКА БЫЛА ПОТЕРЯНА -->
+    <button type="button" id="submit-fallback">Отправить заявку</button>
+</form>
+
+  
     </div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -434,3 +479,4 @@
     </script>
 </body>
 </html>
+
