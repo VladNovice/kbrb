@@ -50,20 +50,20 @@
         .container { 
             max-width: 800px; 
             margin: 0 auto; 
-            padding-top: 15px; /* ИЗМЕНЕНИЕ ЗДЕСЬ */
+            padding-top: 15px;
         }
 
         .progress-wrapper {
             position: sticky;
             top: 10px;
             z-index: 10;
-            display: flex;
             align-items: center;
             gap: 8px;
             margin-bottom: 16px;
             background-color: var(--tg-theme-bg-color);
             padding: 4px 0;
             transition: background-color 0.3s ease;
+            display: none; /* ИЗМЕНЕНИЕ ЗДЕСЬ: Скрываем всю секцию с прогрессом */
         }
         .progress-container {
             flex-grow: 1;
@@ -224,6 +224,7 @@
 </head>
 <body>
     <div class="container">
+        <!-- Этот блок теперь будет скрыт через CSS -->
         <div class="progress-wrapper">
             <div class="progress-container">
                 <div class="progress-bar" id="form-progress-bar"></div>
@@ -297,13 +298,14 @@
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        // ... (JavaScript код остается без изменений) ...
         document.addEventListener('DOMContentLoaded', async function () {
             const tg = window.Telegram?.WebApp;
             const form = document.getElementById('invest-form');
             const mainButton = tg ? tg.MainButton : null;
             const submitFallback = document.getElementById('submit-fallback');
             
+            // Эти элементы останутся в коде, но так как их родитель скрыт,
+            // их изменение не будет видно и не вызовет ошибок.
             const progressBar = document.getElementById('form-progress-bar');
             const progressText = document.getElementById('progress-text');
             const requiredFields = Array.from(form.querySelectorAll('[required]'));
@@ -359,11 +361,15 @@
             }
 
             function updateProgressAndButton() {
-                const filledRequiredFields = requiredFields.filter(field => field.value.trim() !== '').length;
-                const progressPercentage = totalRequiredFields > 0 ? (filledRequiredFields / totalRequiredFields) * 100 : 0;
-                
-                progressBar.style.width = `${progressPercentage}%`;
-                progressText.textContent = `${Math.round(progressPercentage)}%`;
+                // Эта часть кода будет продолжать работать в фоне, 
+                // но её результат не будет виден пользователю.
+                if (progressBar && progressText) {
+                    const filledRequiredFields = requiredFields.filter(field => field.value.trim() !== '').length;
+                    const progressPercentage = totalRequiredFields > 0 ? (filledRequiredFields / totalRequiredFields) * 100 : 0;
+                    
+                    progressBar.style.width = `${progressPercentage}%`;
+                    progressText.textContent = `${Math.round(progressPercentage)}%`;
+                }
 
                 const isValid = form.checkValidity();
                 if (mainButton) {
