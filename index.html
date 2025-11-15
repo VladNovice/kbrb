@@ -13,12 +13,11 @@
             --tg-theme-hint-color: #6d6d72;
             --tg-theme-link-color: #007aff;
             --tg-theme-separator-color: #e5e5e5;
-            --accent-color: #007aff;
+            /* !!! ПЕРЕМЕННАЯ ДЛЯ ЦВЕТА КНОПКИ TELEGRAM С ЗАПАСНЫМ ВАРИАНТОМ !!! */
+            --tg-theme-button-color: #007aff;
             --input-bg-color: #f9f9f9;
             --border-radius-l: 12px;
             --border-radius-m: 8px;
-            /* !!! ЦВЕТ КНОПКИ ИЗМЕНЕН С ЗЕЛЕНОГО НА СИНИЙ !!! */
-            --primary-blue: #007aff;
         }
 
         [data-theme="dark"] {
@@ -28,9 +27,9 @@
             --tg-theme-hint-color: #99a2ad;
             --tg-theme-link-color: #52a5e7;
             --tg-theme-separator-color: #313d4c;
-            --accent-color: #52a5e7;
+            /* !!! ЗАПАСНОЙ ВАРИАНТ ДЛЯ ТЕМНОЙ ТЕМЫ !!! */
+            --tg-theme-button-color: #52a5e7;
             --input-bg-color: #1c2734;
-            --primary-blue: #52a5e7;
         }
 
         html {
@@ -51,7 +50,6 @@
 
         .container { max-width: 800px; margin: 0 auto; }
 
-        /* !!! СТИЛИ ДЛЯ ШКАЛЫ ПРОГРЕССА !!! */
         .progress-container {
             position: sticky;
             top: 10px;
@@ -67,17 +65,17 @@
         .progress-bar {
             width: 0%;
             height: 100%;
-            background-color: var(--primary-blue);
-            transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            /* !!! ЦВЕТ ШКАЛЫ ПРОГРЕССА ТЕПЕРЬ ЗАВИСИТ ОТ ЦВЕТА КНОПКИ !!! */
+            background-color: var(--tg-theme-button-color);
+            transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s ease;
         }
-        /* !!! КОНЕЦ СТИЛЕЙ ДЛЯ ШКАЛЫ ПРОГРЕССА !!! */
 
         header {
             display: flex;
             gap: 16px;
             align-items: center;
             margin-bottom: 24px;
-            padding-top: 10px; /* Уменьшен отступ, т.к. есть шкала */
+            padding-top: 10px;
         }
         header img {
             width: 56px;
@@ -143,9 +141,10 @@
             outline: none;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
+        /* !!! ЦВЕТ ФОКУСА ТЕПЕРЬ ЗАВИСИТ ОТ ЦВЕТА КНОПКИ !!! */
         input:focus, select:focus, textarea:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-color) 20%, transparent);
+            border-color: var(--tg-theme-button-color);
+            box-shadow: 0 0 0 2px color-mix(in srgb, var(--tg-theme-button-color) 20%, transparent);
         }
         input::placeholder, textarea::placeholder {
             color: color-mix(in srgb, var(--tg-theme-hint-color) 60%, transparent);
@@ -192,13 +191,14 @@
             padding: 14px;
             border: none;
             border-radius: var(--border-radius-m);
-            /* !!! ЦВЕТ КНОПКИ ИЗМЕНЕН НА СИНИЙ !!! */
-            background: var(--primary-blue);
-            color: #fff;
+            /* !!! ЦВЕТ КНОПКИ ТЕПЕРЬ ЗАВИСИТ ОТ ЦВЕТА КНОПКИ TELEGRAM !!! */
+            background: var(--tg-theme-button-color);
+            color: #fff; /* Telegram сам подбирает цвет текста, но для fallback лучше оставить белый */
             font-weight: 600;
             font-size: 16px;
             cursor: pointer;
             width: 100%;
+            transition: background-color 0.3s ease;
         }
         #submit-fallback:disabled { opacity: 0.6; cursor: not-allowed; }
 
@@ -211,7 +211,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- !!! HTML-ЭЛЕМЕНТ ДЛЯ ШКАЛЫ ПРОГРЕССА !!! -->
         <div class="progress-container">
             <div class="progress-bar" id="form-progress-bar"></div>
         </div>
@@ -225,6 +224,7 @@
         </header>
 
         <form id="invest-form" autocomplete="on" novalidate>
+            <!-- ... (структура формы без изменений) ... -->
             <section class="card">
                 <h2>1. Базовые сведения</h2>
                 <div class="form-grid">
@@ -288,7 +288,6 @@
             const mainButton = tg ? tg.MainButton : null;
             const submitFallback = document.getElementById('submit-fallback');
             
-            // !!! ЭЛЕМЕНТЫ ДЛЯ ШКАЛЫ ПРОГРЕССА !!!
             const progressBar = document.getElementById('form-progress-bar');
             const requiredFields = Array.from(form.querySelectorAll('[required]'));
             const totalRequiredFields = requiredFields.length;
@@ -299,6 +298,11 @@
                 if (tg) {
                     tg.setHeaderColor('secondary_bg_color');
                     tg.setBackgroundColor(theme === 'dark' ? '#18222d' : '#f1f1f1');
+                    
+                    // !!! УСТАНАВЛИВАЕМ CSS-ПЕРЕМЕННУЮ С ЦВЕТОМ КНОПКИ ИЗ ТЕМЫ TELEGRAM !!!
+                    if (tg.themeParams && tg.themeParams.button_color) {
+                        document.documentElement.style.setProperty('--tg-theme-button-color', tg.themeParams.button_color);
+                    }
                 }
             }
             
@@ -338,19 +342,15 @@
                 if (mainButton) mainButton.setText('Отправить заявку');
             }
 
-            // !!! ЛОГИКА ШКАЛЫ ПРОГРЕССА И ВАЛИДАЦИИ !!!
             function updateProgressAndButton() {
-                // Обновление шкалы прогресса
                 const filledRequiredFields = requiredFields.filter(field => field.value.trim() !== '').length;
                 const progressPercentage = totalRequiredFields > 0 ? (filledRequiredFields / totalRequiredFields) * 100 : 0;
                 progressBar.style.width = `${progressPercentage}%`;
 
-                // Обновление состояния кнопки
                 const isValid = form.checkValidity();
                 if (mainButton) {
                     if (isValid) mainButton.enable(); else mainButton.disable();
-                    // !!! ЦВЕТ КНОПКИ ИЗМЕНЕН НА СИНИЙ !!!
-                    mainButton.setParams({ color: '#007aff', text_color: '#ffffff' });
+                    // !!! БОЛЬШЕ НЕ УСТАНАВЛИВАЕМ ЦВЕТ ЯВНО, TELEGRAM СДЕЛАЕТ ЭТО АВТОМАТИЧЕСКИ !!!
                     mainButton.show();
                 } else {
                     submitFallback.style.display = 'block';
