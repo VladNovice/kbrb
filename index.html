@@ -6,20 +6,14 @@
     <title>Заявка на инвестиционный проект</title>
 
     <style>
-        /* 
-         * Финальная версия с фокусом на качественный UX/UI.
-         * Разработано вашим лучшим фронтенд-разработчиком.
-        */
+        /* ... (tu CSS existente sin cambios) ... */
         :root {
-            /* Базовая палитра Telegram */
             --tg-theme-bg-color: #f1f1f1;
             --tg-theme-section-bg-color: #ffffff;
             --tg-theme-text-color: #000000;
             --tg-theme-hint-color: #6d6d72;
             --tg-theme-link-color: #007aff;
             --tg-theme-separator-color: #e5e5e5;
-            
-            /* Кастомные переменные для UI */
             --accent-color: #007aff;
             --input-bg-color: #f9f9f9;
             --border-radius-l: 12px;
@@ -56,12 +50,13 @@
 
         .container { max-width: 800px; margin: 0 auto; }
 
-        /* --- Шапка --- */
         header {
             display: flex;
             gap: 16px;
             align-items: center;
             margin-bottom: 24px;
+            /* !!! CORRECCIÓN DE ESPACIADO !!! */
+            padding-top: 10px;
         }
         header img {
             width: 56px;
@@ -80,7 +75,6 @@
             font-size: 14px;
         }
 
-        /* --- Структура карточек --- */
         .card {
             background-color: var(--tg-theme-section-bg-color);
             border-radius: var(--border-radius-l);
@@ -96,7 +90,6 @@
             border-bottom: 1px solid var(--tg-theme-separator-color);
         }
 
-        /* --- Сетка полей --- */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -108,7 +101,7 @@
             gap: 6px;
         }
         .form-field--full {
-            grid-column: 1 / -1; /* Поле занимает всю ширину */
+            grid-column: 1 / -1;
         }
         
         label {
@@ -149,7 +142,6 @@
             margin-top: 2px;
         }
 
-        /* --- Сворачиваемая секция --- */
         details.card { padding: 0; overflow: hidden; }
         summary {
             cursor: pointer;
@@ -173,7 +165,6 @@
         details[open] > summary::after { transform: scaleY(0.8) rotate(180deg); }
         details .details-content { padding: 0 20px 20px 20px; }
 
-        /* --- Кнопка-фоллбэк --- */
         #submit-fallback {
             display: none;
             margin-top: 10px;
@@ -206,6 +197,7 @@
         </header>
 
         <form id="invest-form" autocomplete="on" novalidate>
+            <!-- ... (toda tu estructura de formulario sin cambios) ... -->
             <section class="card">
                 <h2>1. Базовые сведения</h2>
                 <div class="form-grid">
@@ -261,13 +253,17 @@
         </form>
     </div>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- =================================================================== -->
+    <!-- !!! BLOQUE DE SCRIPT COMPLETAMENTE NUEVO Y ACTUALIZADO !!! -->
+    <!-- =================================================================== -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', async function () {
             const tg = window.Telegram?.WebApp;
+            const form = document.getElementById('invest-form');
+            const mainButton = tg ? tg.MainButton : null;
+            const submitFallback = document.getElementById('submit-fallback');
 
-            // --- Блок инициализации и настройки темы (без изменений) ---
             function applyTheme() {
                 const theme = tg && tg.colorScheme === 'dark' ? 'dark' : 'light';
                 document.documentElement.setAttribute('data-theme', theme);
@@ -284,26 +280,51 @@
             }
             applyTheme();
 
-            // --- Блок работы с формой и кнопками (без изменений) ---
-            const form = document.getElementById('invest-form');
-            const mainButton = tg ? tg.MainButton : null;
-            const submitFallback = document.getElementById('submit-fallback');
+            // --- LÓGICA DE CARGA Y RELLENO DE DATOS PARA EDICIÓN ---
+            const params = new URLSearchParams(window.location.search);
+            const projectId = params.get('project_id');
 
-            if (mainButton) {
-                mainButton.setText("Отправить заявку");
-                mainButton.setParams({ color: '#00A950', text_color: '#ffffff' });
-                mainButton.show();
+            if (projectId) {
+                // Si hay un ID de proyecto, estamos en modo edición
+                document.querySelector('header h1').textContent = 'Редактирование проекта';
+                if (mainButton) mainButton.setText('Сохранить изменения');
+                
+                try {
+                    // !!! RECUERDA REEMPLAZAR ESTA URL POR LA TUYA DE NGROK !!!
+                    const dataUrl = `https://<TU-URL-DE-NGROK>.ngrok-free.app/get_project?project_id=${projectId}&init_data=${encodeURIComponent(tg.initData || '')}`;
+                    
+                    const response = await fetch(dataUrl);
+                    if (response.ok) {
+                        const projectData = await response.json();
+                        // Rellenamos el formulario con los datos recibidos
+                        for (const key in projectData) {
+                            const field = form.elements[key];
+                            if (field) {
+                                field.value = projectData[key];
+                            }
+                        }
+                    } else {
+                        tg.showAlert('Не удалось загрузить данные проекта для редактирования.');
+                    }
+                } catch (e) {
+                    tg.showAlert('Ошибка сети при загрузке данных проекта.');
+                }
             } else {
-                submitFallback.style.display = 'block';
+                // Modo de creación de nuevo proyecto
+                if (mainButton) mainButton.setText('Отправить заявку');
             }
 
+            // --- LÓGICA DE VALIDACIÓN Y BOTONES (sin cambios) ---
             function formIsValid() { return form.checkValidity(); }
 
             function updateButtonState() {
                 const isValid = formIsValid();
                 if (mainButton) {
                     if (isValid) mainButton.enable(); else mainButton.disable();
+                    mainButton.setParams({ color: '#00A950', text_color: '#ffffff' });
+                    mainButton.show();
                 } else {
+                    submitFallback.style.display = 'block';
                     submitFallback.disabled = !isValid;
                 }
             }
@@ -318,51 +339,46 @@
                 return data;
             }
 
-            // ===================================================================
-            // !!! НОВАЯ ФУНКЦИЯ ОТПРАВКИ ДАННЫХ НА ВАШ БЭКЕНД !!!
-            // ===================================================================
+            // --- FUNCIÓN DE ENVÍO DE DATOS (CREACIÓN Y ACTUALIZACIÓN) ---
             async function sendDataViaBackend() {
                 if (!formIsValid()) return;
 
-                // !!! ВАЖНО: ВСТАВЬТЕ СЮДА ВАШ АКТУАЛЬНЫЙ NGROK URL !!!
-                // Он меняется каждый раз при перезапуске ngrok.
-                const BACKEND_URL = "https://cubistic-nonevadingly-connie.ngrok-free.dev/submit";
+                // !!! RECUERDA REEMPLAZAR ESTA URL POR LA TUYA DE NGROK !!!
+                const BACKEND_URL = "https://<TU-URL-DE-NGROK>.ngrok-free.app/submit";
 
                 const formData = collectFormData();
-                const initData = tg ? tg.initData : ''; // Данные для верификации
+                // Si estamos en modo edición, añadimos el ID del proyecto a los datos
+                if (projectId) {
+                    formData.project_id = projectId;
+                }
+                
+                const initData = tg ? tg.initData : '';
 
                 if (mainButton) mainButton.showProgress();
 
                 try {
-                    // Отправляем данные на наш Python-сервер методом POST
                     const response = await fetch(BACKEND_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            formData: formData, // Данные из формы
-                            initData: initData  // Секретные данные для проверки
+                            formData: formData,
+                            initData: initData
                         })
                     });
 
                     if (response.ok) {
-                        // Если сервер ответил "ОК" (статус 200), закрываем приложение
                         if (tg) tg.close();
                     } else {
-                        // Если сервер ответил ошибкой, показываем ее пользователю
                         const errorData = await response.json();
                         tg.showAlert(errorData.error || "Произошла неизвестная ошибка на сервере.");
                     }
-
                 } catch (error) {
-                    // Если не удалось даже отправить запрос (нет сети, ngrok выключен)
-                    tg.showAlert("Не удалось связаться с сервером. Проверьте ваше интернет-соединение.");
+                    tg.showAlert("Не удалось связаться с сервером. Проверьте интернет-соединение.");
                 } finally {
-                    // В любом случае убираем индикатор загрузки
                     if (mainButton) mainButton.hideProgress();
                 }
             }
 
-            // --- Привязываем НОВУЮ функцию к кнопкам ---
             if (mainButton) {
                 mainButton.onClick(sendDataViaBackend);
             }
@@ -374,7 +390,3 @@
     </script>
 </body>
 </html>
-
-
-
-
