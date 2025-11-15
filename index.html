@@ -335,7 +335,7 @@
                 if (mainButton) mainButton.setText('Сохранить изменения');
                 
                 try {
-                    const dataUrl = `https://<TU-URL-DE-NGROK>.ngrok-free.app/get_project?project_id=${projectId}&init_data=${encodeURIComponent(tg.initData || '')}`;
+                    const dataUrl = `https://cubistic-nonevadingly-connie.ngrok-free.dev/get_project?project_id=${projectId}&init_data=${encodeURIComponent(tg.initData || '')}`;
                     
                     const response = await fetch(dataUrl);
                     if (response.ok) {
@@ -431,3 +431,4 @@
     </script>
 </body>
 </html>
+
