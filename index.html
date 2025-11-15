@@ -262,11 +262,12 @@
     </div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        // --- JS-логика осталась без изменений, она идеальна для этой задачи ---
         document.addEventListener('DOMContentLoaded', function () {
             const tg = window.Telegram?.WebApp;
 
+            // --- Блок инициализации и настройки темы (без изменений) ---
             function applyTheme() {
                 const theme = tg && tg.colorScheme === 'dark' ? 'dark' : 'light';
                 document.documentElement.setAttribute('data-theme', theme);
@@ -283,6 +284,7 @@
             }
             applyTheme();
 
+            // --- Блок работы с формой и кнопками (без изменений) ---
             const form = document.getElementById('invest-form');
             const mainButton = tg ? tg.MainButton : null;
             const submitFallback = document.getElementById('submit-fallback');
@@ -316,44 +318,55 @@
                 return data;
             }
 
-            async function sendDataToBot() {
-                // 1. Проверяем, валидна ли форма. Если нет, ничего не делаем.
+            // ===================================================================
+            // !!! НОВАЯ ФУНКЦИЯ ОТПРАВКИ ДАННЫХ НА ВАШ БЭКЕНД !!!
+            // ===================================================================
+            async function sendDataViaBackend() {
                 if (!formIsValid()) return;
-                
-                // 2. Собираем данные из формы.
-                const data = collectFormData();
-                
+
+                // !!! ВАЖНО: ВСТАВЬТЕ СЮДА ВАШ АКТУАЛЬНЫЙ NGROK URL !!!
+                // Он меняется каждый раз при перезапуске ngrok.
+                const BACKEND_URL = "https://ВАШ-АКТУАЛЬНЫЙ-URL.ngrok-free.app/submit";
+
+                const formData = collectFormData();
+                const initData = tg ? tg.initData : ''; // Данные для верификации
+
+                if (mainButton) mainButton.showProgress();
+
                 try {
-                    // Показываем индикатор загрузки на кнопке
-                    if (mainButton) mainButton.showProgress();
-                    
-                    // 3. Превращаем объект в JSON-строку.
-                    const payload = JSON.stringify(data);
-                    
-                    if (tg) {
-                        // 4. Отправляем данные боту.
-                        tg.sendData(payload);
-                        
-                        // 5. !!! ВОТ ИСПРАВЛЕНИЕ !!!
-                        // Закрываем окно Web App, чтобы вернуть пользователя в чат.
-                        // Это и есть подтверждение успешной отправки.
-                        tg.close(); 
-                        
+                    // Отправляем данные на наш Python-сервер методом POST
+                    const response = await fetch(BACKEND_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            formData: formData, // Данные из формы
+                            initData: initData  // Секретные данные для проверки
+                        })
+                    });
+
+                    if (response.ok) {
+                        // Если сервер ответил "ОК" (статус 200), закрываем приложение
+                        if (tg) tg.close();
                     } else {
-                        // Этот блок для отладки вне Telegram
-                        console.log("DEBUG payload:", payload);
-                        alert("DEBUG: payload отправлен в консоль.");
+                        // Если сервер ответил ошибкой, показываем ее пользователю
+                        const errorData = await response.json();
+                        tg.showAlert(errorData.error || "Произошла неизвестная ошибка на сервере.");
                     }
+
+                } catch (error) {
+                    // Если не удалось даже отправить запрос (нет сети, ngrok выключен)
+                    tg.showAlert("Не удалось связаться с сервером. Проверьте ваше интернет-соединение.");
                 } finally {
-                    // В любом случае прячем индикатор загрузки
+                    // В любом случае убираем индикатор загрузки
                     if (mainButton) mainButton.hideProgress();
                 }
             }
 
+            // --- Привязываем НОВУЮ функцию к кнопкам ---
             if (mainButton) {
-                mainButton.onClick(sendDataToBot);
+                mainButton.onClick(sendDataViaBackend);
             }
-            submitFallback.addEventListener('click', sendDataToBot);
+            submitFallback.addEventListener('click', sendDataViaBackend);
 
             const firstReq = form.querySelector('[required]');
             if (firstReq) firstReq.focus();
@@ -361,5 +374,6 @@
     </script>
 </body>
 </html>
+
 
 
