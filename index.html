@@ -44,22 +44,23 @@
             padding: 16px;
             font-size: 16px;
             line-height: 1.5;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container { max-width: 800px; margin: 0 auto; }
 
-        /* !!! ИЗМЕНЕНИЯ ДЛЯ ОТОБРАЖЕНИЯ ПРОЦЕНТОВ !!! */
         .progress-wrapper {
             position: sticky;
             top: 10px;
             z-index: 10;
             display: flex;
             align-items: center;
-            gap: 12px;
+            /* !!! УМЕНЬШЕНО РАССТОЯНИЕ !!! */
+            gap: 8px;
             margin-bottom: 16px;
-            /* Добавляем фон, чтобы текст не "проваливался" при прокрутке */
             background-color: var(--tg-theme-bg-color);
             padding: 4px 0;
+            transition: background-color 0.3s ease;
         }
         .progress-container {
             flex-grow: 1;
@@ -69,6 +70,7 @@
             overflow: hidden;
             border: 1px solid var(--tg-theme-separator-color);
             box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         .progress-bar {
             width: 0%;
@@ -85,14 +87,13 @@
             text-align: right;
             transition: color 0.3s ease;
         }
-        /* !!! КОНЕЦ ИЗМЕНЕНИЙ ДЛЯ ПРОЦЕНТОВ !!! */
 
         header {
             display: flex;
             gap: 16px;
             align-items: center;
             margin-bottom: 24px;
-            padding-top: 0; /* Убрали отступ, т.к. wrapper прогресса его создает */
+            padding-top: 0;
         }
         header img {
             width: 56px;
@@ -100,16 +101,8 @@
             border-radius: var(--border-radius-l);
             object-fit: contain;
         }
-        header h1 {
-            font-size: 20px;
-            font-weight: 700;
-            margin: 0;
-        }
-        header p {
-            margin: 0;
-            color: var(--tg-theme-hint-color);
-            font-size: 14px;
-        }
+        header h1 { font-size: 20px; font-weight: 700; margin: 0; }
+        header p { margin: 0; color: var(--tg-theme-hint-color); font-size: 14px; }
 
         .card {
             background-color: var(--tg-theme-section-bg-color);
@@ -117,6 +110,8 @@
             padding: 20px;
             margin-bottom: 16px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            border: 1px solid transparent;
         }
         .card h2 {
             font-size: 17px;
@@ -124,6 +119,7 @@
             margin: 0 0 16px 0;
             padding-bottom: 8px;
             border-bottom: 1px solid var(--tg-theme-separator-color);
+            transition: border-color 0.3s ease;
         }
 
         .form-grid {
@@ -131,20 +127,15 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 18px;
         }
-        .form-field {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
+        /* !!! НОВЫЙ СТИЛЬ ДЛЯ КОМПАКТНОЙ СЕТКИ В ИНЖЕНЕРИИ !!! */
+        .form-grid--engineering {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 250px));
         }
-        .form-field--full {
-            grid-column: 1 / -1;
-        }
+
+        .form-field { display: flex; flex-direction: column; gap: 6px; }
+        .form-field--full { grid-column: 1 / -1; }
         
-        label {
-            font-weight: 500;
-            font-size: 14px;
-            color: var(--tg-theme-hint-color);
-        }
+        label { font-weight: 500; font-size: 14px; color: var(--tg-theme-hint-color); }
         
         input, select, textarea {
             width: 100%;
@@ -156,7 +147,7 @@
             font-size: 16px;
             font-family: inherit;
             outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
         }
         input:focus, select:focus, textarea:focus {
             border-color: var(--tg-theme-button-color);
@@ -171,12 +162,6 @@
         .input-group { display: flex; gap: 8px; }
         .input-group input { flex: 1; }
         .input-group select { flex-basis: 100px; }
-
-        .small {
-            font-size: 13px;
-            color: var(--tg-theme-hint-color);
-            margin-top: 2px;
-        }
 
         details.card { padding: 0; overflow: hidden; }
         summary {
@@ -213,9 +198,18 @@
             font-size: 16px;
             cursor: pointer;
             width: 100%;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, opacity 0.3s ease;
         }
         #submit-fallback:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* !!! УЛУЧШЕНИЯ ДЛЯ ТЕМНОЙ ТЕМЫ !!! */
+        [data-theme="dark"] .card {
+            box-shadow: none;
+            border: 1px solid var(--tg-theme-separator-color);
+        }
+        [data-theme="dark"] .progress-container {
+            box-shadow: none;
+        }
 
         @media (max-width: 600px) {
             body { padding: 8px; }
@@ -226,7 +220,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- !!! ОБНОВЛЕННАЯ СТРУКТУРА ШКАЛЫ ПРОГРЕССА С ТЕКСТОМ !!! -->
         <div class="progress-wrapper">
             <div class="progress-container">
                 <div class="progress-bar" id="form-progress-bar"></div>
@@ -243,7 +236,7 @@
         </header>
 
         <form id="invest-form" autocomplete="on" novalidate>
-            <!-- ... (структура формы без изменений) ... -->
+            <!-- ... (секции 1, 2, 3 без изменений) ... -->
             <section class="card">
                 <h2>1. Базовые сведения</h2>
                 <div class="form-grid">
@@ -284,7 +277,8 @@
             <details class="card">
                 <summary>Продвинутые параметры (инженерия)</summary>
                 <div class="details-content">
-                    <div class="form-grid">
+                    <!-- !!! ПРИМЕНЕН НОВЫЙ КЛАСС ДЛЯ КОМПАКТНОГО ОТОБРАЖЕНИЯ !!! -->
+                    <div class="form-grid form-grid--engineering">
                         <div class="form-field"><label for="hazard_class">Класс опасности</label><select id="hazard_class" name="hazard_class"><option value="">— Не указывать —</option><option value="1">1 (мин)</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5 (макс)</option></select></div>
                         <div class="form-field"><label for="gas_m3_per_h">Газ (м³/час)</label><input id="gas_m3_per_h" name="gas_m3_per_h" type="number" min="0" step="0.1"/></div>
                         <div class="form-field"><label for="electricity_kw">Электроснабжение (кВт)</label><input id="electricity_kw" name="electricity_kw" type="number" min="0" step="0.1"/></div>
@@ -301,6 +295,7 @@
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
+        // ... (весь JavaScript код остается без изменений) ...
         document.addEventListener('DOMContentLoaded', async function () {
             const tg = window.Telegram?.WebApp;
             const form = document.getElementById('invest-form');
@@ -308,7 +303,6 @@
             const submitFallback = document.getElementById('submit-fallback');
             
             const progressBar = document.getElementById('form-progress-bar');
-            // !!! ПОЛУЧАЕМ ЭЛЕМЕНТ ДЛЯ ТЕКСТА ПРОЦЕНТОВ !!!
             const progressText = document.getElementById('progress-text');
             const requiredFields = Array.from(form.querySelectorAll('[required]'));
             const totalRequiredFields = requiredFields.length;
@@ -366,9 +360,7 @@
                 const filledRequiredFields = requiredFields.filter(field => field.value.trim() !== '').length;
                 const progressPercentage = totalRequiredFields > 0 ? (filledRequiredFields / totalRequiredFields) * 100 : 0;
                 
-                // Обновляем шкалу
                 progressBar.style.width = `${progressPercentage}%`;
-                // !!! ОБНОВЛЯЕМ ТЕКСТ С ПРОЦЕНТАМИ !!!
                 progressText.textContent = `${Math.round(progressPercentage)}%`;
 
                 const isValid = form.checkValidity();
