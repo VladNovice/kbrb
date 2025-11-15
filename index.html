@@ -50,12 +50,14 @@
         .container { max-width: 800px; margin: 0 auto; }
 
         .progress-wrapper {
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
             position: sticky;
             top: 10px;
             z-index: 10;
             display: flex;
             align-items: center;
-            /* !!! УМЕНЬШЕНО РАССТОЯНИЕ !!! */
             gap: 8px;
             margin-bottom: 16px;
             background-color: var(--tg-theme-bg-color);
@@ -127,11 +129,7 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 18px;
         }
-        /* !!! НОВЫЙ СТИЛЬ ДЛЯ КОМПАКТНОЙ СЕТКИ В ИНЖЕНЕРИИ !!! */
-        .form-grid--engineering {
-            grid-template-columns: repeat(auto-fill, minmax(200px, 250px));
-        }
-
+        
         .form-field { display: flex; flex-direction: column; gap: 6px; }
         .form-field--full { grid-column: 1 / -1; }
         
@@ -202,7 +200,6 @@
         }
         #submit-fallback:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* !!! УЛУЧШЕНИЯ ДЛЯ ТЕМНОЙ ТЕМЫ !!! */
         [data-theme="dark"] .card {
             box-shadow: none;
             border: 1px solid var(--tg-theme-separator-color);
@@ -277,8 +274,8 @@
             <details class="card">
                 <summary>Продвинутые параметры (инженерия)</summary>
                 <div class="details-content">
-                    <!-- !!! ПРИМЕНЕН НОВЫЙ КЛАСС ДЛЯ КОМПАКТНОГО ОТОБРАЖЕНИЯ !!! -->
-                    <div class="form-grid form-grid--engineering">
+                    <!-- !!! УБРАН СПЕЦИАЛЬНЫЙ КЛАСС, ТЕПЕРЬ СЕТКА СТАНДАРТНАЯ !!! -->
+                    <div class="form-grid">
                         <div class="form-field"><label for="hazard_class">Класс опасности</label><select id="hazard_class" name="hazard_class"><option value="">— Не указывать —</option><option value="1">1 (мин)</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5 (макс)</option></select></div>
                         <div class="form-field"><label for="gas_m3_per_h">Газ (м³/час)</label><input id="gas_m3_per_h" name="gas_m3_per_h" type="number" min="0" step="0.1"/></div>
                         <div class="form-field"><label for="electricity_kw">Электроснабжение (кВт)</label><input id="electricity_kw" name="electricity_kw" type="number" min="0" step="0.1"/></div>
