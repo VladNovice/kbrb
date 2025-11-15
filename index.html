@@ -290,10 +290,11 @@
 
             // --- BUTTON CONFIGURATION ---
             if (mainButton) {
-                mainButton.setText("Отправить заявку");
-                // Используем нативный цвет кнопки из темы Telegram
-                mainButton.setParams({ color: 'var(--tg-theme-button-color)', text_color: 'var(--tg-theme-button-text-color)' });
-                mainButton.show();
+                    mainButton.setText("Отправить заявку");
+                    mainButton.color = tg.themeParams.button_color || 'var(--button-color)';  // Фоллбэк на вашу CSS-var
+                    mainButton.textColor = tg.themeParams.button_text_color || 'var(--button-text-color)';
+                    mainButton.show();
+            }
             } else {
                 // Эта строка - ключ к решению проблемы. Она показывает кнопку в браузере.
                 submitFallback.style.display = 'block';
@@ -362,3 +363,4 @@
     </script>
 </body>
 </html>
+
