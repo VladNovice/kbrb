@@ -317,18 +317,35 @@
             }
 
             async function sendDataToBot() {
+                // 1. Проверяем, валидна ли форма. Если нет, ничего не делаем.
                 if (!formIsValid()) return;
+                
+                // 2. Собираем данные из формы.
                 const data = collectFormData();
+                
                 try {
+                    // Показываем индикатор загрузки на кнопке
                     if (mainButton) mainButton.showProgress();
+                    
+                    // 3. Превращаем объект в JSON-строку.
                     const payload = JSON.stringify(data);
+                    
                     if (tg) {
+                        // 4. Отправляем данные боту.
                         tg.sendData(payload);
+                        
+                        // 5. !!! ВОТ ИСПРАВЛЕНИЕ !!!
+                        // Закрываем окно Web App, чтобы вернуть пользователя в чат.
+                        // Это и есть подтверждение успешной отправки.
+                        tg.close(); 
+                        
                     } else {
+                        // Этот блок для отладки вне Telegram
                         console.log("DEBUG payload:", payload);
                         alert("DEBUG: payload отправлен в консоль.");
                     }
                 } finally {
+                    // В любом случае прячем индикатор загрузки
                     if (mainButton) mainButton.hideProgress();
                 }
             }
@@ -344,4 +361,5 @@
     </script>
 </body>
 </html>
+
 
